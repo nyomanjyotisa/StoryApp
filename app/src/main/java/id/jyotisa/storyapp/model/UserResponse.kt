@@ -19,7 +19,7 @@ data class LoginResponse(
     @field:SerializedName("message")
     val message: String,
 
-    @field:SerializedName("restaurant")
+    @field:SerializedName("loginResult")
     val loginResult: LoginResult
 )
 

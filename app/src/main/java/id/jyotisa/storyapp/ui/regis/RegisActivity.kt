@@ -50,7 +50,7 @@ class RegisActivity : AppCompatActivity() {
                         startActivity(it)
                     }
                 }else{
-                    Toast.makeText(this@RegisActivity, "Gagal", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisActivity, response.message(), Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<RegisResponse>, t: Throwable) {
