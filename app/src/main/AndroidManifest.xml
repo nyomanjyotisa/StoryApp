@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="id.jyotisa.storyapp" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,6 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StoryApp" >
+        <activity
+            android:name=".ui.addstory.AddStoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detail.DetailActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.regis.RegisActivity"
             android:exported="false" />

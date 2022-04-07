@@ -3,10 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/asus/AndroidStudioProjects/StoryApp/app/src/main/res/drawable-v24/ic_user.xml" value="0.2445" />
+        <entry key="..\:/Users/asus/AndroidStudioProjects/StoryApp/app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.121" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/StoryApp/app/src/main/res/drawable/ic_eye.xml" value="0.1595" />
-        <entry key="..\:/Users/asus/AndroidStudioProjects/StoryApp/app/src/main/res/layout/activity_login.xml" value="0.20697463768115942" />
-        <entry key="..\:/Users/asus/AndroidStudioProjects/StoryApp/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/asus/AndroidStudioProjects/StoryApp/app/src/main/res/layout/activity_add_story.xml" value="0.1037037037037037" />
+        <entry key="..\:/Users/asus/AndroidStudioProjects/StoryApp/app/src/main/res/layout/activity_detail.xml" value="0.2" />
+        <entry key="..\:/Users/asus/AndroidStudioProjects/StoryApp/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/Users/asus/AndroidStudioProjects/StoryApp/app/src/main/res/layout/activity_main.xml" value="0.152" />
         <entry key="..\:/Users/asus/AndroidStudioProjects/StoryApp/app/src/main/res/layout/activity_regis.xml" value="0.20697463768115942" />
+        <entry key="..\:/Users/asus/AndroidStudioProjects/StoryApp/app/src/main/res/layout/item_story.xml" value="0.1" />
+        <entry key="..\:/Users/asus/AndroidStudioProjects/StoryApp/app/src/main/res/menu/main_menu.xml" value="0.23854166666666668" />
+        <entry key="..\:/Users/asus/AndroidStudioProjects/StoryApp/app/src/main/res/menu/menu.xml" value="0.23854166666666668" />
       </map>
     </option>
   </component>
