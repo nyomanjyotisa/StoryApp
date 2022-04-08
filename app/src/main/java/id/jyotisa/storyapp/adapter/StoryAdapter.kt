@@ -7,7 +7,7 @@ import id.jyotisa.storyapp.databinding.ItemStoryBinding
 import id.jyotisa.storyapp.helper.loadImage
 import id.jyotisa.storyapp.model.Story
 
-class StoryAdapter(private val callback: StoryAdapter.StoryCallback) :
+class StoryAdapter(private val callback: StoryCallback) :
     RecyclerView.Adapter<StoryAdapter.UserViewHolder>() {
     private val _data = ArrayList<Story>()
 

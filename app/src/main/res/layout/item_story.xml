@@ -23,7 +23,7 @@
             android:layout_margin="10dp"
             android:layout_marginBottom="20dp"
             android:contentDescription="Image Story"
-            android:src="@drawable/ic_user"
+            android:src="@drawable/ic_image"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent" />
 

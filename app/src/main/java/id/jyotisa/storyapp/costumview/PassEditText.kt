@@ -38,8 +38,8 @@ class PassEditText: AppCompatEditText, View.OnTouchListener {
                 // Do nothing.
             }
             override fun afterTextChanged(s: Editable) {
-                if(getText().toString().length < 6){
-                    setError("Password Minimal 6 Karakter")
+                if(text.toString().length < 6){
+                    error = "Password Minimal 6 Karakter"
                 }
             }
         })

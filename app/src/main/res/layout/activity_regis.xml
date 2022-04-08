@@ -14,24 +14,44 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:focusableInTouchMode="true">
+
+        <ImageView
+            android:id="@+id/img_unud"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_margin="10dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="Image Story"
+            android:src="@drawable/unud"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <TextView
             android:id="@+id/header_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Regis"
+            android:text="Daftar ke Story App"
+            android:alpha="0"
+            android:layout_margin="30dp"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="40sp"
+            android:textSize="25sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/img_unud" />
 
         <TextView
             android:id="@+id/name_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Name"
+            android:text="Nama"
+            android:alpha="0"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/header_text" />
@@ -42,8 +62,11 @@
             android:layout_height="50dp"
             android:ems="10"
             android:hint="Enter Your name..."
+            android:alpha="0"
             android:inputType="textEmailAddress"
             android:paddingStart="20dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:textSize="17sp"
             app:layout_constraintTop_toBottomOf="@+id/name_label" />
 
@@ -52,6 +75,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Email"
+            android:alpha="0"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/name" />
@@ -62,8 +89,11 @@
             android:layout_height="50dp"
             android:ems="10"
             android:hint="Enter Your Email..."
+            android:alpha="0"
             android:inputType="textEmailAddress"
             android:paddingStart="20dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:textSize="17sp"
             app:layout_constraintTop_toBottomOf="@+id/email_label" />
 
@@ -71,7 +101,11 @@
             android:id="@+id/password_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Password"
+            android:text="Kata Sandi"
+            android:alpha="0"
+            android:paddingTop="15dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/email" />
@@ -82,22 +116,59 @@
             android:layout_height="50dp"
             android:ems="10"
             android:hint="Enter Your Password..."
+            android:alpha="0"
             android:inputType="textPassword"
             android:paddingStart="20dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:textSize="17sp"
             app:layout_constraintTop_toBottomOf="@+id/password_label" />
 
         <Button
             android:id="@+id/regis"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:elevation="3dp"
-            android:text="Regis"
+            android:text="Daftar"
+            android:alpha="0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password" />
+
+        <TextView
+            android:id="@+id/login_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="30dp"
+            android:text="Sudah memiliki Akun?"
+            android:alpha="0"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/regis" />
+
+        <TextView
+            android:id="@+id/login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="5dp"
+            android:text="Masuk Sekarang"
+            android:alpha="0"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:layout_marginBottom="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/login_label"
+            app:layout_constraintTop_toBottomOf="@+id/regis" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
