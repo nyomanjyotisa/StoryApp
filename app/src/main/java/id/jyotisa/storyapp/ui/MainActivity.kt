@@ -16,6 +16,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import id.jyotisa.storyapp.R
 import id.jyotisa.storyapp.adapter.StoryAdapter
+import id.jyotisa.storyapp.database.StoryDao
+import id.jyotisa.storyapp.database.StoryDatabase
 import id.jyotisa.storyapp.databinding.ActivityMainBinding
 import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.model.Story
@@ -24,12 +26,16 @@ import id.jyotisa.storyapp.ui.detail.DetailActivity
 import id.jyotisa.storyapp.ui.login.LoginActivity
 import id.jyotisa.storyapp.ui.login.LoginViewModel
 import id.jyotisa.storyapp.ui.login.LoginViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
     private val storyAdapter = StoryAdapter(this)
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +61,7 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
         mainViewModel.stories.observe(this) { listStory ->
             storyAdapter.setData(listStory)
             showLoading(false)
+            mainViewModel.saveStoriesToDatabase(listStory)
         }
 
         mainViewModel.getToastObserver().observe(this) { message ->

@@ -1,19 +1,33 @@
 package id.jyotisa.storyapp.ui
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import id.jyotisa.storyapp.api.RetrofitConfig
+import id.jyotisa.storyapp.database.StoryDao
+import id.jyotisa.storyapp.database.StoryDatabase
 import id.jyotisa.storyapp.model.Story
 import id.jyotisa.storyapp.model.StoryResponse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel: ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _stories = MutableLiveData<ArrayList<Story>>()
     val stories: LiveData<ArrayList<Story>> = _stories
     private val toastMessageObserver: MutableLiveData<String?> = MutableLiveData<String?>()
+
+    private var storyDao: StoryDao? = null
+    private var storyDatabase: StoryDatabase? = StoryDatabase.getDatabase(application)
+
+    init {
+        storyDao = storyDatabase?.storyDao()
+    }
 
     fun getStories(query: Int) {
         val client = RetrofitConfig.apiInstance.getStories(query)
@@ -31,5 +45,13 @@ class MainViewModel: ViewModel() {
 
     fun getToastObserver(): LiveData<String?> {
         return toastMessageObserver
+    }
+
+    fun saveStoriesToDatabase(listStory: ArrayList<Story>){
+        for (story in listStory) {
+            CoroutineScope(Dispatchers.IO).launch {
+                storyDao?.insert(story)
+            }
+        }
     }
 }
