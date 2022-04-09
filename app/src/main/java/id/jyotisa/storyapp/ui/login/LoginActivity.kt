@@ -42,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
 
-        binding.regis.setOnClickListener { view ->
+        binding.regis.setOnClickListener {
             Intent(this@LoginActivity, RegisActivity::class.java).also {
                 startActivity(it)
             }
@@ -58,8 +58,6 @@ class LoginActivity : AppCompatActivity() {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 val responseBody = response.body()
                 if (response.isSuccessful && responseBody != null) {
-                    Toast.makeText(this@LoginActivity, "Login Berhasil", Toast.LENGTH_SHORT).show()
-                    Toast.makeText(this@LoginActivity, responseBody.loginResult.token, Toast.LENGTH_SHORT).show()
                     mainViewModel.saveAuthToken(responseBody.loginResult.token)
                     Intent(this@LoginActivity, MainActivity::class.java).also {
                         startActivity(it)

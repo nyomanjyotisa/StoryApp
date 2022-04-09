@@ -2,13 +2,13 @@ package id.jyotisa.storyapp.ui
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -24,7 +24,6 @@ import id.jyotisa.storyapp.ui.detail.DetailActivity
 import id.jyotisa.storyapp.ui.login.LoginActivity
 import id.jyotisa.storyapp.ui.login.LoginViewModel
 import id.jyotisa.storyapp.ui.login.LoginViewModelFactory
-import id.jyotisa.storyapp.ui.regis.RegisActivity
 
 class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
     private lateinit var binding: ActivityMainBinding
@@ -56,6 +55,14 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
         mainViewModel.stories.observe(this) { listStory ->
             storyAdapter.setData(listStory)
             showLoading(false)
+        }
+
+        mainViewModel.getToastObserver().observe(this) { message ->
+            Toast.makeText(
+                this,
+                message,
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         with(binding) {

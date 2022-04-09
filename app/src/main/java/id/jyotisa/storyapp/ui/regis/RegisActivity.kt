@@ -6,14 +6,10 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import id.jyotisa.storyapp.R
-import id.jyotisa.storyapp.api.ApiService
 import id.jyotisa.storyapp.api.RetrofitConfig
-import id.jyotisa.storyapp.databinding.ActivityMainBinding
 import id.jyotisa.storyapp.databinding.ActivityRegisBinding
 import id.jyotisa.storyapp.model.RegisResponse
 import id.jyotisa.storyapp.ui.login.LoginActivity
@@ -40,7 +36,7 @@ class RegisActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
 
-        binding.login.setOnClickListener { view ->
+        binding.login.setOnClickListener {
             Intent(this@RegisActivity, LoginActivity::class.java).also {
                 startActivity(it)
             }
@@ -56,7 +52,6 @@ class RegisActivity : AppCompatActivity() {
             ) {
                 val responseBody = response.body()
                 if (response.isSuccessful && responseBody != null) {
-                    Toast.makeText(this@RegisActivity, "Regis Berhasil", Toast.LENGTH_SHORT).show()
                     Intent(this@RegisActivity, LoginActivity::class.java).also {
                         startActivity(it)
                     }

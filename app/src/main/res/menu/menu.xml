@@ -3,17 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:icon="@drawable/ic_baseline_menu_24"
-        android:title="Menu"
-        app:showAsAction="ifRoom" >
-
+        app:showAsAction="ifRoom"
+        android:title="Menu">
         <menu>
-
             <item
                 android:id="@+id/logout"
-                android:title="Logout">
+                android:title="Keluar">
             </item>
-
         </menu>
-
     </item>
 </menu>

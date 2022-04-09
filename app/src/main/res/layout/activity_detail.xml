@@ -12,8 +12,8 @@
         android:layout_height="250dp"
         android:layout_margin="10dp"
         android:layout_marginBottom="20dp"
-        android:contentDescription="Image Story"
-        android:src="@drawable/ic_user"
+        android:contentDescription="@string/gambar_story"
+        android:src="@drawable/ic_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

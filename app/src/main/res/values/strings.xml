@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">StoryApp</string>
+    <string name="gambar_story">Gambar Story</string>
+    <string name="gambar_unud">Gambar Unud</string>
+    <string name="daftar_ke_story_app">Daftar ke Story App</string>
+    <string name="nama">Nama</string>
+    <string name="masukkan_nama_anda">Masukkan nama Anda</string>
+    <string name="email">Email</string>
+    <string name="masukkan_email_anda">Masukkan email Anda</string>
+    <string name="kata_sandi">Kata Sandi</string>
+    <string name="masukkan_kata_sandi_anda">Masukkan kata sandi Anda</string>
+    <string name="daftar">Daftar</string>
+    <string name="sudah_memiliki_akun">Sudah memiliki Akun?</string>
+    <string name="masuk_sekarang">Masuk Sekarang</string>
+    <string name="tambah_story_baru">Tambah Story Baru</string>
+    <string name="masuk_ke_story_app">Masuk ke Story App</string>
+    <string name="masuk">Masuk</string>
+    <string name="belum_memiliki_akun">Belum memiliki Akun?</string>
+    <string name="daftar_sekarang">Daftar Sekarang</string>
+    <string name="kamera">Kamera</string>
+    <string name="galeri">Galeri</string>
+    <string name="masukkan_deskripsi">Masukkan deskripsi</string>
+    <string name="unggah">Unggah</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
 </resources>

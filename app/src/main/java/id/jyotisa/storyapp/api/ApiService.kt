@@ -9,7 +9,6 @@ import retrofit2.http.*
 
 interface ApiService {
 
-
     @FormUrlEncoded
     @POST("register")
     fun register(
@@ -25,11 +24,9 @@ interface ApiService {
         @Field("password") password: String
     ): Call<LoginResponse>
 
-
     @GET("stories")
     @Headers("Authorization: $TOKEN")
     fun getStories(@Query("page") page: Int): Call<StoryResponse>
-
 
     @Multipart
     @POST("stories")

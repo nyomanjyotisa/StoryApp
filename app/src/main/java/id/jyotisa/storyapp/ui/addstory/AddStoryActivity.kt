@@ -8,13 +8,11 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import id.jyotisa.storyapp.R
 import id.jyotisa.storyapp.api.RetrofitConfig
 import id.jyotisa.storyapp.databinding.ActivityAddStoryBinding
 import id.jyotisa.storyapp.helper.reduceFileImage
