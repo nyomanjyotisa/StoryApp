@@ -16,8 +16,6 @@ import java.util.*
 internal class StackRemoteViewsFactory(private val mContext: Context) : RemoteViewsService.RemoteViewsFactory {
 
     private val mWidgetItems = ArrayList<Bitmap>()
-    private var mStoryList = ArrayList<Story>()
-
     private val database: StoryDatabase = StoryDatabase.getDatabase(mContext)
 
     override fun onCreate() {
@@ -29,10 +27,8 @@ internal class StackRemoteViewsFactory(private val mContext: Context) : RemoteVi
         c.moveToFirst()
         while(!c.isAfterLast) {
             mWidgetItems.add(BitmapFactory.decodeStream(URL(c.getString(3)).openStream()))
-//            mWidgetItems.add(BitmapFactory.decodeStream(URL(c.getString(c.getColumnIndex("createdAt"))).openStream()))
             c.moveToNext()
         }
-        mWidgetItems.add(BitmapFactory.decodeStream(URL("https://upload.wikimedia.org/wikipedia/id/2/2d/Logo-unud-baru.png").openStream()))
     }
 
     override fun onDestroy() {

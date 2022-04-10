@@ -48,7 +48,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun saveStoriesToDatabase(listStory: ArrayList<Story>){
-        for (story in listStory) {
+        CoroutineScope(Dispatchers.IO).launch {
+            storyDao?.delete()
+        }
+        for (story in listStory.reversed()) {
             CoroutineScope(Dispatchers.IO).launch {
                 storyDao?.insert(story)
             }

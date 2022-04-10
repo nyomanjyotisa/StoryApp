@@ -27,7 +27,8 @@ class StoriesBannerWidget : AppWidgetProvider() {
 
             val views = RemoteViews(context.packageName, R.layout.stories_banner_widget)
             views.setRemoteAdapter(R.id.stack_view, intent)
-            views.setEmptyView(R.id.stack_view, R.id.empty_view)
+            views.setEmptyView(R.id.stack_view, R.id.progress_bar_widget)
+            views.setProgressBar(R.id.progress_bar_widget, 1, 1, false )
 
             val toastIntent = Intent(context, StoriesBannerWidget::class.java)
             toastIntent.action = TOAST_ACTION
