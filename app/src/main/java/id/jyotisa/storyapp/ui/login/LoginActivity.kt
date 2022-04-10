@@ -4,15 +4,19 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import id.jyotisa.storyapp.R
 import id.jyotisa.storyapp.api.RetrofitConfig
 import id.jyotisa.storyapp.databinding.ActivityLoginBinding
 import id.jyotisa.storyapp.datastore.UserPreferences
@@ -28,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
     private lateinit var binding: ActivityLoginBinding
+    private var pressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,12 +42,31 @@ class LoginActivity : AppCompatActivity() {
         playAnimation()
 
         binding.login.setOnClickListener { view ->
-            postLogin(binding.email.text.toString(),
-                binding.password.text.toString())
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
+            val email = binding.email.text.toString()
+            val password = binding.password.text.toString()
+            when {
+                email.isEmpty() -> {
+                    binding.email.error = getString(R.string.email_label)
+                }
+                password.isEmpty() -> {
+                    binding.password.error = getString(R.string.password_hint)
+                }
+                !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                    binding.email.error = getString(R.string.email_not_valid)
+                }
+                password.length < 6 -> {
+                    binding.password.error = getString(R.string.pass_not_valid)
+                }
+                else -> {
+                    postLogin(
+                        binding.email.text.toString(),
+                        binding.password.text.toString()
+                    )
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+            }
         }
-
         binding.regis.setOnClickListener {
             Intent(this@LoginActivity, RegisActivity::class.java).also {
                 startActivity(it)
@@ -66,7 +90,11 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }else{
                     showLoading(false)
-                    Toast.makeText(this@LoginActivity, response.message(), Toast.LENGTH_SHORT).show()
+                    if (responseBody != null){
+                        Toast.makeText(this@LoginActivity, responseBody.message, Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(this@LoginActivity, R.string.login_fail, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
@@ -100,5 +128,29 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showLoading(state: Boolean) {
         binding.progressBar.visibility = if (state) View.VISIBLE else View.GONE
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu2,menu)
+        return true
+
+    }override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.locale -> {
+                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onBackPressed() {
+        if (pressedTime + 4000 > System.currentTimeMillis()) {
+            super.onBackPressed()
+            finishAffinity()
+        } else {
+            Toast.makeText(this@LoginActivity, R.string.exit_app, Toast.LENGTH_SHORT).show()
+        }
+        pressedTime = System.currentTimeMillis()
     }
 }

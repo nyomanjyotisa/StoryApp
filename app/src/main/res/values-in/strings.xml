@@ -32,4 +32,8 @@
     <string name="pass_not_valid">Password Minimal 6 Karakter</string>
     <string name="picture_chooser">Pilih Gambar</string>
     <string name="no_image">Silakan masukkan berkas gambar terlebih dahulu.</string>
+    <string name="regis_success">Pendaftaran Berhasil. Silahkan Login</string>
+    <string name="exit_app">Tekan kembali lagi untuk keluar</string>
+    <string name="regis_fail">Email telah diterdaftar. Gunakan Email Lain.</string>
+    <string name="login_fail">Email atau Password anda Salah</string>
 </resources>

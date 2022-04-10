@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -19,12 +18,11 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
 import id.jyotisa.storyapp.R
 import id.jyotisa.storyapp.databinding.ActivityAddStoryBinding
 import id.jyotisa.storyapp.datastore.UserPreferences
-import id.jyotisa.storyapp.helper.reduceFileImage
-import id.jyotisa.storyapp.helper.uriToFile
+import id.jyotisa.storyapp.helper.Utils.reduceFileImage
+import id.jyotisa.storyapp.helper.Utils.uriToFile
 import id.jyotisa.storyapp.ui.MainActivity
 import id.jyotisa.storyapp.ui.ViewModelFactory
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -98,7 +96,7 @@ class AddStoryActivity : AppCompatActivity() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         intent.resolveActivity(packageManager)
 
-        id.jyotisa.storyapp.helper.createTempFile(application).also {
+        id.jyotisa.storyapp.helper.Utils.createTempFile(application).also {
             val photoURI: Uri = FileProvider.getUriForFile(
                 this@AddStoryActivity,
                 "id.jyotisa.storyapp.mycamera",

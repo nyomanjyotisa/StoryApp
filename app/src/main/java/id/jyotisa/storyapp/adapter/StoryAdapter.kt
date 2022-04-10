@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import id.jyotisa.storyapp.databinding.ItemStoryBinding
-import id.jyotisa.storyapp.helper.loadImage
+import id.jyotisa.storyapp.helper.Utils.loadImage
 import id.jyotisa.storyapp.model.Story
 
 class StoryAdapter(private val callback: StoryCallback) :

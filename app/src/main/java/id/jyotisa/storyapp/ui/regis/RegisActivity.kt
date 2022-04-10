@@ -4,11 +4,15 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import id.jyotisa.storyapp.R
 import id.jyotisa.storyapp.api.RetrofitConfig
 import id.jyotisa.storyapp.databinding.ActivityRegisBinding
 import id.jyotisa.storyapp.model.RegisResponse
@@ -29,11 +33,35 @@ class RegisActivity : AppCompatActivity() {
         playAnimation()
 
         binding.regis.setOnClickListener { view ->
-            postRegis(binding.name.text.toString(),
-                binding.email.text.toString(),
-                binding.password.text.toString())
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
+            val name = binding.name.text.toString()
+            val email = binding.email.text.toString()
+            val password = binding.password.text.toString()
+            when {
+                name.isEmpty() -> {
+                    binding.name.error = getString(R.string.name_hint)
+                }
+                email.isEmpty() -> {
+                    binding.email.error = getString(R.string.email_label)
+                }
+                password.isEmpty() -> {
+                    binding.password.error = getString(R.string.password_hint)
+                }
+                !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                    binding.email.error = getString(R.string.email_not_valid)
+                }
+                password.length < 6 -> {
+                    binding.password.error = getString(R.string.pass_not_valid)
+                }
+                else -> {
+                    postRegis(
+                        binding.name.text.toString(),
+                        binding.email.text.toString(),
+                        binding.password.text.toString()
+                    )
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+            }
         }
 
         binding.login.setOnClickListener {
@@ -52,13 +80,18 @@ class RegisActivity : AppCompatActivity() {
                 response: Response<RegisResponse>
             ) {
                 val responseBody = response.body()
-                if (response.isSuccessful && responseBody != null) {Toast.makeText(this@RegisActivity, "Pendaftaran Berhasil. Silahkan Login", Toast.LENGTH_SHORT).show()
+                if (response.isSuccessful && responseBody != null) {
+                    Toast.makeText(this@RegisActivity, getString(R.string.regis_success), Toast.LENGTH_SHORT).show()
                     Intent(this@RegisActivity, LoginActivity::class.java).also {
                         startActivity(it)
                     }
                 }else{
                     showLoading(false)
-                    Toast.makeText(this@RegisActivity, response.message(), Toast.LENGTH_SHORT).show()
+                    if (responseBody != null) {
+                        Toast.makeText(this@RegisActivity, responseBody.message, Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(this@RegisActivity, R.string.regis_fail, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
             override fun onFailure(call: Call<RegisResponse>, t: Throwable) {
@@ -94,5 +127,19 @@ class RegisActivity : AppCompatActivity() {
 
     private fun showLoading(state: Boolean) {
         binding.progressBar.visibility = if (state) View.VISIBLE else View.GONE
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu2,menu)
+        return true
+
+    }override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.locale -> {
+                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

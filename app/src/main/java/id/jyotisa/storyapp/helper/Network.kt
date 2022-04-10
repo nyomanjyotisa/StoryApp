@@ -1,5 +1,7 @@
 package id.jyotisa.storyapp.helper
 
+import id.jyotisa.storyapp.BuildConfig.BASE_URL
+
 object Network {
-    const val BASE_URL = "https://story-api.dicoding.dev/v1/"
+    const val URL = BASE_URL
 }

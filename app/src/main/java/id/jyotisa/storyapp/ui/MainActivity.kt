@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -30,6 +29,7 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
     private lateinit var mainViewModel: MainViewModel
     private val storyAdapter = StoryAdapter(this)
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
+    private var pressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,5 +119,15 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
 
     private fun showNotFound() {
         binding.notFound.visibility = View.VISIBLE
+    }
+
+    override fun onBackPressed() {
+        if (pressedTime + 4000 > System.currentTimeMillis()) {
+            super.onBackPressed()
+            finishAffinity()
+        } else {
+            Toast.makeText(this@MainActivity, R.string.exit_app, Toast.LENGTH_SHORT).show()
+        }
+        pressedTime = System.currentTimeMillis()
     }
 }

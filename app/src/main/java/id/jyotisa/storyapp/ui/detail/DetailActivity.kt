@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import id.jyotisa.storyapp.databinding.ActivityDetailBinding
-import id.jyotisa.storyapp.helper.loadImage
+import id.jyotisa.storyapp.helper.Utils.loadImage
 import id.jyotisa.storyapp.model.Story
 
 class DetailActivity : AppCompatActivity() {

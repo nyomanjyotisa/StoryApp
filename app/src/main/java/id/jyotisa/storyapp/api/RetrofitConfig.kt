@@ -1,7 +1,7 @@
 package id.jyotisa.storyapp.api
 
 import id.jyotisa.storyapp.BuildConfig
-import id.jyotisa.storyapp.helper.Network.BASE_URL
+import id.jyotisa.storyapp.helper.Network.URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -19,7 +19,7 @@ object RetrofitConfig {
         .build()
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl(URL)
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
         .build()
