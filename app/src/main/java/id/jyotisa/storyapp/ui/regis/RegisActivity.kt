@@ -44,6 +44,7 @@ class RegisActivity : AppCompatActivity() {
     }
 
     private fun postRegis(name: String, email: String, password: String) {
+        showLoading(true)
         val client = RetrofitConfig.apiInstance.register(name, email, password)
         client.enqueue(object : Callback<RegisResponse> {
             override fun onResponse(
@@ -51,16 +52,18 @@ class RegisActivity : AppCompatActivity() {
                 response: Response<RegisResponse>
             ) {
                 val responseBody = response.body()
-                if (response.isSuccessful && responseBody != null) {
+                if (response.isSuccessful && responseBody != null) {Toast.makeText(this@RegisActivity, "Pendaftaran Berhasil. Silahkan Login", Toast.LENGTH_SHORT).show()
                     Intent(this@RegisActivity, LoginActivity::class.java).also {
                         startActivity(it)
                     }
                 }else{
+                    showLoading(false)
                     Toast.makeText(this@RegisActivity, response.message(), Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<RegisResponse>, t: Throwable) {
-                Toast.makeText(this@RegisActivity, "Gagal", Toast.LENGTH_SHORT).show()
+                showLoading(false)
+                Toast.makeText(this@RegisActivity, "Fail ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -87,5 +90,9 @@ class RegisActivity : AppCompatActivity() {
             playSequentially(headerText, nameLabel, name, emailLabel, email, passLabel, pass, regis, loginLabel, login)
             startDelay = 500
         }.start()
+    }
+
+    private fun showLoading(state: Boolean) {
+        binding.progressBar.visibility = if (state) View.VISIBLE else View.GONE
     }
 }

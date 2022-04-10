@@ -1,7 +1,9 @@
 package id.jyotisa.storyapp.api
 
-import id.jyotisa.storyapp.helper.Network.TOKEN
-import id.jyotisa.storyapp.model.*
+import id.jyotisa.storyapp.model.FileUploadResponse
+import id.jyotisa.storyapp.model.LoginResponse
+import id.jyotisa.storyapp.model.RegisResponse
+import id.jyotisa.storyapp.model.StoryResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -25,14 +27,15 @@ interface ApiService {
     ): Call<LoginResponse>
 
     @GET("stories")
-    @Headers("Authorization: $TOKEN")
-    fun getStories(@Query("page") page: Int): Call<StoryResponse>
+    fun getStories(
+        @Header("Authorization") token: String
+    ): Call<StoryResponse>
 
     @Multipart
     @POST("stories")
-    @Headers("Authorization: $TOKEN")
     fun uploadImage(
+        @Header("Authorization") token: String,
         @Part file: MultipartBody.Part,
-        @Part("description") description: RequestBody,
+        @Part("description") description: RequestBody
     ): Call<FileUploadResponse>
 }

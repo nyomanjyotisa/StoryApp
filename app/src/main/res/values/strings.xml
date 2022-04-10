@@ -27,4 +27,9 @@
     <string name="locale_setting">Locale Setting</string>
     <string name="logout">Logout</string>
     <string name="permission_denied">Don\'t get permission</string>
+    <string name="can_not_load_stories">Can not load stories</string>
+    <string name="email_not_valid">Email not valid</string>
+    <string name="pass_not_valid">6 Chars Min for Password</string>
+    <string name="picture_chooser">Choose a Picture</string>
+    <string name="no_image">Please select an image first.</string>
 </resources>

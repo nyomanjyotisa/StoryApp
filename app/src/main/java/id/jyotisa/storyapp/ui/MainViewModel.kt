@@ -1,6 +1,7 @@
 package id.jyotisa.storyapp.ui
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -28,8 +29,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         storyDao = storyDatabase?.storyDao()
     }
 
-    fun getStories(query: Int) {
-        val client = RetrofitConfig.apiInstance.getStories(query)
+    fun getStories(auth_token: String) {
+        val client = RetrofitConfig.apiInstance.getStories("Bearer $auth_token")
         client.enqueue(object : Callback<StoryResponse> {
             override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
                 if (response.isSuccessful) {

@@ -24,7 +24,6 @@ import id.jyotisa.storyapp.ui.addstory.AddStoryActivity
 import id.jyotisa.storyapp.ui.detail.DetailActivity
 import id.jyotisa.storyapp.ui.login.LoginActivity
 import id.jyotisa.storyapp.ui.login.LoginViewModel
-import id.jyotisa.storyapp.ui.login.LoginViewModelFactory
 
 class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
     private lateinit var binding: ActivityMainBinding
@@ -32,14 +31,15 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
     private val storyAdapter = StoryAdapter(this)
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val pref = UserPreferences.getInstance(dataStore)
-        val loginViewModel = ViewModelProvider(this, LoginViewModelFactory(pref))[LoginViewModel::class.java]
+        val loginViewModel = ViewModelProvider(this, ViewModelFactory(pref))[LoginViewModel::class.java]
+
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         loginViewModel.getAuthToken().observe(this
         ) { authToken: String ->
@@ -48,11 +48,10 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
                     startActivity(it)
                 }
             }
+            mainViewModel.getStories(authToken)
         }
 
-        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
-
-        mainViewModel.getStories(1)
+        showLoading(true)
 
         mainViewModel.stories.observe(this) { listStory ->
             storyAdapter.setData(listStory)
@@ -66,6 +65,8 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
                 message,
                 Toast.LENGTH_SHORT
             ).show()
+            showNotFound()
+            showLoading(false)
         }
 
         with(binding) {
@@ -92,7 +93,7 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val pref = UserPreferences.getInstance(dataStore)
-        val loginViewModel = ViewModelProvider(this, LoginViewModelFactory(pref))[LoginViewModel::class.java]
+        val loginViewModel = ViewModelProvider(this, ViewModelFactory(pref))[LoginViewModel::class.java]
 
         return when(item.itemId){
             R.id.logout -> {
@@ -113,7 +114,10 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
     override fun onStoryClick(story: Story) {
         val storyDetailIntent = Intent(this, DetailActivity::class.java)
         storyDetailIntent.putExtra(DetailActivity.DATA_STORY, story)
-        Log.v("tes woi", "hrhr")
         startActivity(storyDetailIntent)
+    }
+
+    private fun showNotFound() {
+        binding.notFound.visibility = View.VISIBLE
     }
 }

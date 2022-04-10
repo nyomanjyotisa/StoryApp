@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
+import id.jyotisa.storyapp.R
 
 class PassEditText: AppCompatEditText, View.OnTouchListener {
 
@@ -38,7 +39,7 @@ class PassEditText: AppCompatEditText, View.OnTouchListener {
             }
             override fun afterTextChanged(s: Editable) {
                 if(text.toString().length < 6){
-                    error = "Password Minimal 6 Karakter"
+                    error = context.getString(R.string.pass_not_valid)
                 }
             }
         })

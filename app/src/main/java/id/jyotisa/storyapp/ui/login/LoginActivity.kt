@@ -18,6 +18,7 @@ import id.jyotisa.storyapp.databinding.ActivityLoginBinding
 import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.model.LoginResponse
 import id.jyotisa.storyapp.ui.MainActivity
+import id.jyotisa.storyapp.ui.ViewModelFactory
 import id.jyotisa.storyapp.ui.regis.RegisActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -50,8 +51,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun postLogin(email: String, password: String) {
+        showLoading(true)
         val pref = UserPreferences.getInstance(dataStore)
-        val mainViewModel = ViewModelProvider(this, LoginViewModelFactory(pref))[LoginViewModel::class.java]
+        val mainViewModel = ViewModelProvider(this, ViewModelFactory(pref))[LoginViewModel::class.java]
 
         val client = RetrofitConfig.apiInstance.login(email, password)
         client.enqueue(object : Callback<LoginResponse> {
@@ -63,11 +65,13 @@ class LoginActivity : AppCompatActivity() {
                         startActivity(it)
                     }
                 }else{
+                    showLoading(false)
                     Toast.makeText(this@LoginActivity, response.message(), Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                Toast.makeText(this@LoginActivity, "Gagal", Toast.LENGTH_SHORT).show()
+                showLoading(false)
+                Toast.makeText(this@LoginActivity, "Fail ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -92,5 +96,9 @@ class LoginActivity : AppCompatActivity() {
             playSequentially(headerText, emailLabel, email, passLabel, pass, login, regisLabel, regis)
             startDelay = 500
         }.start()
+    }
+
+    private fun showLoading(state: Boolean) {
+        binding.progressBar.visibility = if (state) View.VISIBLE else View.GONE
     }
 }

@@ -1,39 +1,42 @@
 package id.jyotisa.storyapp.ui.addstory
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import id.jyotisa.storyapp.R
-import id.jyotisa.storyapp.api.RetrofitConfig
 import id.jyotisa.storyapp.databinding.ActivityAddStoryBinding
+import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.helper.reduceFileImage
 import id.jyotisa.storyapp.helper.uriToFile
-import id.jyotisa.storyapp.model.FileUploadResponse
 import id.jyotisa.storyapp.ui.MainActivity
-import okhttp3.MediaType.Companion.toMediaType
+import id.jyotisa.storyapp.ui.ViewModelFactory
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.File
 
 class AddStoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddStoryBinding
     private lateinit var currentPhotoPath: String
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
 
     private var getFile: File? = null
 
@@ -69,6 +72,7 @@ class AddStoryActivity : AppCompatActivity() {
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
                 this,
@@ -85,7 +89,7 @@ class AddStoryActivity : AppCompatActivity() {
         val intent = Intent()
         intent.action = Intent.ACTION_GET_CONTENT
         intent.type = "image/*"
-        val chooser = Intent.createChooser(intent, "Choose a Picture")
+        val chooser = Intent.createChooser(intent, getString(R.string.picture_chooser))
         launcherIntentGallery.launch(chooser)
     }
 
@@ -136,7 +140,7 @@ class AddStoryActivity : AppCompatActivity() {
         if (getFile != null) {
             val file = reduceFileImage(getFile as File)
 
-            val description = binding.desc.text.toString().toRequestBody("text/plain".toMediaType())
+            val description = binding.desc.text.toString()
             val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
             val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
                 "photo",
@@ -144,31 +148,31 @@ class AddStoryActivity : AppCompatActivity() {
                 requestImageFile
             )
 
-            val service = RetrofitConfig.apiInstance.uploadImage(imageMultipart, description)
+            val pref = UserPreferences.getInstance(dataStore)
+            val addStoryViewModel = ViewModelProvider(this, ViewModelFactory(pref))[AddStoryViewModel::class.java]
 
-            service.enqueue(object : Callback<FileUploadResponse> {
-                override fun onResponse(
-                    call: Call<FileUploadResponse>,
-                    response: Response<FileUploadResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()
-                        if (responseBody != null && !responseBody.error) {
-                            Toast.makeText(this@AddStoryActivity, responseBody.message, Toast.LENGTH_SHORT).show()
-                            Intent(this@AddStoryActivity, MainActivity::class.java).also {
-                                startActivity(it)
-                            }
-                        }
-                    } else {
-                        Toast.makeText(this@AddStoryActivity, response.message(), Toast.LENGTH_SHORT).show()
+            addStoryViewModel.getToastObserver().observe(this) { message ->
+                Toast.makeText(
+                    this,
+                    message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            addStoryViewModel.getIsSuccess().observe(this) { isSuccess ->
+                if(isSuccess == true){
+                    Intent(this@AddStoryActivity, MainActivity::class.java).also {
+                        startActivity(it)
                     }
                 }
-                override fun onFailure(call: Call<FileUploadResponse>, t: Throwable) {
-                    Toast.makeText(this@AddStoryActivity, "Gagal instance Retrofit", Toast.LENGTH_SHORT).show()
-                }
-            })
+            }
+
+            addStoryViewModel.getAuthToken().observe(this
+            ) { authToken: String ->
+                addStoryViewModel.getStories(authToken, imageMultipart, description)
+            }
         } else {
-            Toast.makeText(this@AddStoryActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@AddStoryActivity, getString(R.string.no_image), Toast.LENGTH_SHORT).show()
         }
     }
 }
