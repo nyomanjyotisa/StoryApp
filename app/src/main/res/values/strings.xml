@@ -22,10 +22,9 @@
     <string name="input_desc">Input Description</string>
     <string name="upload_button">Upload</string>
     <string name="appwidget_text">StoryApp Stories</string>
-    <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">Widget Description</string>
     <string name="story_empty">Story Empty</string>
     <string name="menu">Menu</string>
     <string name="locale_setting">Locale Setting</string>
     <string name="logout">Logout</string>
+    <string name="permission_denied">Don\'t get permission</string>
 </resources>

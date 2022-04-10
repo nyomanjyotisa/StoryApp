@@ -9,9 +9,7 @@ import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.core.os.bundleOf
 import id.jyotisa.storyapp.database.StoryDatabase
-import id.jyotisa.storyapp.model.Story
 import java.net.URL
-import java.util.*
 
 internal class StackRemoteViewsFactory(private val mContext: Context) : RemoteViewsService.RemoteViewsFactory {
 

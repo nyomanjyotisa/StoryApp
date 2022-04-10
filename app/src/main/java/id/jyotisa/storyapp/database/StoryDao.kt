@@ -2,7 +2,6 @@ package id.jyotisa.storyapp.database
 
 
 import android.database.Cursor
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy

@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import id.jyotisa.storyapp.R
 import id.jyotisa.storyapp.api.RetrofitConfig
 import id.jyotisa.storyapp.databinding.ActivityAddStoryBinding
 import id.jyotisa.storyapp.helper.reduceFileImage
@@ -51,7 +52,7 @@ class AddStoryActivity : AppCompatActivity() {
             if (!allPermissionsGranted()) {
                 Toast.makeText(
                     this,
-                    "Tidak mendapatkan permission.",
+                    getString(R.string.permission_denied),
                     Toast.LENGTH_SHORT
                 ).show()
                 finish()

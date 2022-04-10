@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import id.jyotisa.storyapp.api.RetrofitConfig
 import id.jyotisa.storyapp.database.StoryDao
 import id.jyotisa.storyapp.database.StoryDatabase

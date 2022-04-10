@@ -73,7 +73,6 @@
         tools:text="123751" />
 
     <TextView
-        android:id="@+id/id_story"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -84,7 +83,6 @@
         tools:text="123751" />
 
     <ProgressBar
-        android:id="@+id/progress_bar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
