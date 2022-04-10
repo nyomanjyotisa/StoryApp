@@ -22,7 +22,7 @@
             android:layout_height="250dp"
             android:layout_margin="10dp"
             android:layout_marginBottom="20dp"
-            android:contentDescription="@string/gambar_story"
+            android:contentDescription="@string/img_desc"
             android:src="@drawable/ic_image"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/img_story"
             card_view:layout_constraintBottom_toTopOf="@+id/desc"
-            tools:text="I Nyoman Jyotisa" />
+            tools:text="Paul Mccartney" />
 
         <TextView
             android:id="@+id/desc"

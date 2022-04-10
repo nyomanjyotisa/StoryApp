@@ -85,7 +85,7 @@ class LoginActivity : AppCompatActivity() {
         val passLabel = ObjectAnimator.ofFloat(binding.passwordLabel, View.ALPHA, 1f).setDuration(500)
         val pass = ObjectAnimator.ofFloat(binding.password, View.ALPHA, 1f).setDuration(500)
         val login = ObjectAnimator.ofFloat(binding.login, View.ALPHA, 1f).setDuration(500)
-        val regisLabel = ObjectAnimator.ofFloat(binding.regisLagel, View.ALPHA, 1f).setDuration(500)
+        val regisLabel = ObjectAnimator.ofFloat(binding.regisLabel, View.ALPHA, 1f).setDuration(500)
         val regis = ObjectAnimator.ofFloat(binding.regis, View.ALPHA, 1f).setDuration(500)
 
         AnimatorSet().apply {

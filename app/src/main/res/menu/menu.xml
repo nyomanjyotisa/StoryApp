@@ -4,11 +4,15 @@
     <item
         android:icon="@drawable/ic_baseline_menu_24"
         app:showAsAction="ifRoom"
-        android:title="Menu">
+        android:title="@string/menu">
         <menu>
             <item
+                android:id="@+id/locale"
+                android:title="@string/locale_setting">
+            </item>
+            <item
                 android:id="@+id/logout"
-                android:title="Keluar">
+                android:title="@string/logout">
             </item>
         </menu>
     </item>

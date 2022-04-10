@@ -3,6 +3,7 @@ package id.jyotisa.storyapp.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -104,6 +105,10 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
                 Intent(this@MainActivity, LoginActivity::class.java).also {
                     startActivity(it)
                 }
+                return true
+            }
+            R.id.locale -> {
+                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
                 return true
             }
             else -> super.onOptionsItemSelected(item)
