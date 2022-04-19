@@ -2,6 +2,7 @@ package id.jyotisa.storyapp.database
 
 
 import android.database.Cursor
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -22,4 +23,10 @@ interface StoryDao {
 
     @Query("DELETE FROM stories")
     fun delete(): Int
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertStory(quote: List<Story>)
+
+    @Query("SELECT * FROM stories")
+    fun getAllQuote(): PagingSource<Int, Story>
 }
