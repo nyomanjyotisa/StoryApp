@@ -4,6 +4,7 @@ import id.jyotisa.storyapp.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 import java.util.ArrayList
 
@@ -34,7 +35,7 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("page") page: Int,
         @Query("size") size: Int
-    ): ArrayList<Story>
+    ): Response<StoryResponse>
 
     @GET("stories?location=1")
     fun getStoryMaps(

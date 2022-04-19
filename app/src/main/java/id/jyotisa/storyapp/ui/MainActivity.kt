@@ -27,7 +27,7 @@ import id.jyotisa.storyapp.ui.login.LoginActivity
 import id.jyotisa.storyapp.ui.login.LoginViewModel
 import id.jyotisa.storyapp.ui.maps.MapsActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback  {
     private lateinit var binding: ActivityMainBinding
     //    private lateinit var mainViewModel: MainViewModel
     private val mainViewModel: MainViewModel by viewModels {
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val adapter = StoryAdapter()
+        val adapter = StoryAdapter(this)
         binding.rvStories.adapter = adapter.withLoadStateFooter(
             footer = LoadingStateAdapter {
                 adapter.retry()
@@ -104,11 +104,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    override fun onStoryClick(story: Story) {
-//        val storyDetailIntent = Intent(this, DetailActivity::class.java)
-//        storyDetailIntent.putExtra(DetailActivity.DATA_STORY, story)
-//        startActivity(storyDetailIntent)
-//    }
+    override fun onStoryClick(story: Story) {
+        val storyDetailIntent = Intent(this, DetailActivity::class.java)
+        storyDetailIntent.putExtra(DetailActivity.DATA_STORY, story)
+        startActivity(storyDetailIntent)
+    }
 
     override fun onBackPressed() {
         if (pressedTime + 4000 > System.currentTimeMillis()) {

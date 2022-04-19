@@ -6,32 +6,41 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import id.jyotisa.storyapp.databinding.ItemStoryBinding
+import id.jyotisa.storyapp.helper.Utils.loadImage
 import id.jyotisa.storyapp.model.Story
 
-class StoryAdapter :
-    PagingDataAdapter<Story, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class StoryAdapter(private val callback: StoryCallback) :
+    PagingDataAdapter<Story, StoryAdapter.UserViewHolder>(DIFF_CALLBACK) {
+    private val listStory = ArrayList<Story>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-
-        System.out.println("Jyoo : devii")
-        val binding = ItemStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
+        val userBinding = ItemStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return UserViewHolder(userBinding)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val data = getItem(position)
-        System.out.println("Jyoo : $data")
         if (data != null) {
             holder.bind(data)
         }
     }
 
-    class MyViewHolder(private val binding: ItemStoryBinding) :
+    override fun getItemCount(): Int = listStory.size
+
+    inner class UserViewHolder(private val binding: ItemStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: Story) {
-            System.out.println("Jyoo : " + data.name)
-            binding.username.text = data.name
+        fun bind(story: Story) {
+            with(binding) {
+                username.text = story.name
+                desc.text = story.description
+                imgStory.loadImage(story.photoUrl)
+                root.setOnClickListener { callback.onStoryClick(story) }
+            }
         }
+    }
+
+    interface StoryCallback {
+        fun onStoryClick(story: Story)
     }
 
     companion object {
