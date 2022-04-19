@@ -2,8 +2,11 @@ package id.jyotisa.storyapp.ui.maps
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.service.controls.ControlsProviderService.TAG
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -17,6 +20,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import id.jyotisa.storyapp.R
 import id.jyotisa.storyapp.databinding.ActivityMapsBinding
@@ -64,6 +68,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isCompassEnabled = true
         mMap.uiSettings.isMapToolbarEnabled = true
 
+        setMapStyle()
+
         val pref = UserPreferences.getInstance(dataStore)
         var mapsViewModel = ViewModelProvider(this)[MapsViewModel::class.java]
         val loginViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[LoginViewModel::class.java]
@@ -105,6 +111,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 message,
                 Toast.LENGTH_SHORT
             ).show()
+        }
+    }
+
+    private fun setMapStyle() {
+        try {
+            val success =
+                mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style))
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.")
+            }
+        } catch (exception: Resources.NotFoundException) {
+            Log.e(TAG, "Can't find style. Error: ", exception)
         }
     }
 
