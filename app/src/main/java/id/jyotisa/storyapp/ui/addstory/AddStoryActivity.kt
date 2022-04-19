@@ -147,7 +147,7 @@ class AddStoryActivity : AppCompatActivity() {
             )
 
             val pref = UserPreferences.getInstance(dataStore)
-            val addStoryViewModel = ViewModelProvider(this, ViewModelFactory(pref))[AddStoryViewModel::class.java]
+            val addStoryViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[AddStoryViewModel::class.java]
 
             addStoryViewModel.getToastObserver().observe(this) { message ->
                 Toast.makeText(

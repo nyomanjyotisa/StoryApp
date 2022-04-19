@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -15,6 +16,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import id.jyotisa.storyapp.R
+import id.jyotisa.storyapp.adapter.LoadingStateAdapter
 import id.jyotisa.storyapp.adapter.StoryAdapter
 import id.jyotisa.storyapp.databinding.ActivityMainBinding
 import id.jyotisa.storyapp.datastore.UserPreferences
@@ -25,10 +27,12 @@ import id.jyotisa.storyapp.ui.login.LoginActivity
 import id.jyotisa.storyapp.ui.login.LoginViewModel
 import id.jyotisa.storyapp.ui.maps.MapsActivity
 
-class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var mainViewModel: MainViewModel
-    private val storyAdapter = StoryAdapter(this)
+//    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels {
+        ViewModelFactoryMain(this)
+    }
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
     private var pressedTime: Long = 0
 
@@ -37,10 +41,12 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val pref = UserPreferences.getInstance(dataStore)
-        val loginViewModel = ViewModelProvider(this, ViewModelFactory(pref))[LoginViewModel::class.java]
+        binding.rvStories.layoutManager = LinearLayoutManager(this)
 
-        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        val pref = UserPreferences.getInstance(dataStore)
+        val loginViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[LoginViewModel::class.java]
+
+//        mainViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[MainViewModel::class.java]
 
         loginViewModel.getAuthToken().observe(this
         ) { authToken: String ->
@@ -49,32 +55,18 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
                     startActivity(it)
                 }
             }
-            mainViewModel.getStories(authToken)
         }
 
-        showLoading(true)
+        val adapter = StoryAdapter()
+        binding.rvStories.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                adapter.retry()
+            }
+        )
 
-        mainViewModel.stories.observe(this) { listStory ->
-            storyAdapter.setData(listStory)
-            showLoading(false)
-            mainViewModel.saveStoriesToDatabase(listStory)
-        }
-
-        mainViewModel.getToastObserver().observe(this) { message ->
-            Toast.makeText(
-                this,
-                message,
-                Toast.LENGTH_SHORT
-            ).show()
-            showNotFound()
-            showLoading(false)
-        }
-
-        with(binding) {
-            rvStories.setHasFixedSize(true)
-            rvStories.layoutManager = LinearLayoutManager(this@MainActivity)
-            rvStories.adapter = storyAdapter
-        }
+        mainViewModel.story.observe(this, {
+            adapter.submitData(lifecycle, it)
+        })
 
         binding.fab.setOnClickListener {
             Intent(this@MainActivity, AddStoryActivity::class.java).also {
@@ -83,18 +75,14 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu,menu)
         return true
     }
 
-    private fun showLoading(state: Boolean) {
-        binding.progressBar.visibility = if (state) View.VISIBLE else View.GONE
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val pref = UserPreferences.getInstance(dataStore)
-        val loginViewModel = ViewModelProvider(this, ViewModelFactory(pref))[LoginViewModel::class.java]
+        val loginViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[LoginViewModel::class.java]
 
         return when(item.itemId){
             R.id.logout -> {
@@ -118,15 +106,11 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
         }
     }
 
-    override fun onStoryClick(story: Story) {
-        val storyDetailIntent = Intent(this, DetailActivity::class.java)
-        storyDetailIntent.putExtra(DetailActivity.DATA_STORY, story)
-        startActivity(storyDetailIntent)
-    }
-
-    private fun showNotFound() {
-        binding.notFound.visibility = View.VISIBLE
-    }
+//    override fun onStoryClick(story: Story) {
+//        val storyDetailIntent = Intent(this, DetailActivity::class.java)
+//        storyDetailIntent.putExtra(DetailActivity.DATA_STORY, story)
+//        startActivity(storyDetailIntent)
+//    }
 
     override fun onBackPressed() {
         if (pressedTime + 4000 > System.currentTimeMillis()) {

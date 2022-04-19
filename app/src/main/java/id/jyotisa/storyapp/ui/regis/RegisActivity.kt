@@ -64,7 +64,7 @@ class RegisActivity : AppCompatActivity() {
                 else -> {
                     showLoading(true)
                     val pref = UserPreferences.getInstance(dataStore)
-                    val regisViewModel = ViewModelProvider(this, ViewModelFactory(pref))[RegisViewModel::class.java]
+                    val regisViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[RegisViewModel::class.java]
 
                     regisViewModel.postRegis(name, email, password)
 
@@ -124,7 +124,7 @@ class RegisActivity : AppCompatActivity() {
         binding.progressBar.visibility = if (state) View.VISIBLE else View.GONE
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu2,menu)
         return true
     }
