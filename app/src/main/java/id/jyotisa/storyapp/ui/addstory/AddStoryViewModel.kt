@@ -23,8 +23,8 @@ class AddStoryViewModel(private val pref: UserPreferences) : ViewModel() {
         return pref.getAuthToken().asLiveData()
     }
 
-    fun getStories(authToken: String, imageMultipart: MultipartBody.Part, description: String) {
-        val service = RetrofitConfig.getApiService().uploadImage("Bearer $authToken", imageMultipart, description.toRequestBody("text/plain".toMediaType()))
+    fun getStories(authToken: String, imageMultipart: MultipartBody.Part, description: String, lat: Double?, lon: Double?) {
+        val service = RetrofitConfig.getApiService().uploadImage("Bearer $authToken", imageMultipart, description.toRequestBody("text/plain".toMediaType()), lat, lon)
 
         service.enqueue(object : Callback<FileUploadResponse> {
             override fun onResponse(

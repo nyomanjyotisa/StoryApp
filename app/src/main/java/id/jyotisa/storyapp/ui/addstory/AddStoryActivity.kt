@@ -18,6 +18,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import id.jyotisa.storyapp.R
 import id.jyotisa.storyapp.databinding.ActivityAddStoryBinding
 import id.jyotisa.storyapp.datastore.UserPreferences
@@ -30,11 +32,15 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
+
 class AddStoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddStoryBinding
     private lateinit var currentPhotoPath: String
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
+    private var longitude: Double? = null
+    private var latitude: Double? = null
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private var getFile: File? = null
 
@@ -70,6 +76,9 @@ class AddStoryActivity : AppCompatActivity() {
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
+        fetchLocation()
 
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
@@ -81,6 +90,23 @@ class AddStoryActivity : AppCompatActivity() {
         binding.camera.setOnClickListener { startTakePhoto() }
         binding.gallery.setOnClickListener { startGallery() }
         binding.upload.setOnClickListener { uploadImage() }
+    }
+
+    private fun fetchLocation(){
+        val task = fusedLocationProviderClient.lastLocation
+
+        if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ){
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 101)
+            return
+        }
+        task.addOnSuccessListener {
+            if (it != null){
+                longitude = it.longitude
+                latitude = it.latitude
+            }
+        }
     }
 
     private fun startGallery() {
@@ -167,7 +193,7 @@ class AddStoryActivity : AppCompatActivity() {
 
             addStoryViewModel.getAuthToken().observe(this
             ) { authToken: String ->
-                addStoryViewModel.getStories(authToken, imageMultipart, description)
+                addStoryViewModel.getStories(authToken, imageMultipart, description, latitude, longitude)
             }
         } else {
             Toast.makeText(this@AddStoryActivity, getString(R.string.no_image), Toast.LENGTH_SHORT).show()
