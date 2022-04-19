@@ -20,7 +20,7 @@ class LoginViewModel(private val pref: UserPreferences) : ViewModel() {
 
     fun postLogin(email: String, password: String) {
 
-        val client = RetrofitConfig.apiInstance.login(email, password)
+        val client = RetrofitConfig.getApiService().login(email, password)
         client.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 val responseBody = response.body()

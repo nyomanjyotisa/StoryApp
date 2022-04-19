@@ -17,7 +17,7 @@ class MapsViewModel(application: Application) : AndroidViewModel(application) {
     private val toastMessageObserver: MutableLiveData<String?> = MutableLiveData<String?>()
 
     fun getStories(auth_token: String) {
-        val client = RetrofitConfig.apiInstance.getStoryMaps("Bearer $auth_token")
+        val client = RetrofitConfig.getApiService().getStoryMaps("Bearer $auth_token")
         client.enqueue(object : Callback<StoryResponse> {
             override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
                 if (response.isSuccessful) {

@@ -29,7 +29,7 @@ import id.jyotisa.storyapp.ui.maps.MapsActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-//    private lateinit var mainViewModel: MainViewModel
+    //    private lateinit var mainViewModel: MainViewModel
     private val mainViewModel: MainViewModel by viewModels {
         ViewModelFactoryMain(this)
     }
@@ -45,8 +45,6 @@ class MainActivity : AppCompatActivity() {
 
         val pref = UserPreferences.getInstance(dataStore)
         val loginViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[LoginViewModel::class.java]
-
-//        mainViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[MainViewModel::class.java]
 
         loginViewModel.getAuthToken().observe(this
         ) { authToken: String ->
@@ -64,9 +62,9 @@ class MainActivity : AppCompatActivity() {
             }
         )
 
-        mainViewModel.story.observe(this, {
+        mainViewModel.story.observe(this) {
             adapter.submitData(lifecycle, it)
-        })
+        }
 
         binding.fab.setOnClickListener {
             Intent(this@MainActivity, AddStoryActivity::class.java).also {

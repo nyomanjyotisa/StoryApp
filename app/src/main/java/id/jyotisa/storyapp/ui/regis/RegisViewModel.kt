@@ -18,7 +18,7 @@ class RegisViewModel: ViewModel() {
     private var isSuccessFromVM: MutableLiveData<Boolean?> = MutableLiveData<Boolean?>()
 
     fun postRegis(name: String, email: String, password: String) {
-        val client = RetrofitConfig.apiInstance.register(name, email, password)
+        val client = RetrofitConfig.getApiService().register(name, email, password)
         client.enqueue(object : Callback<RegisResponse> {
             override fun onResponse(
                 call: Call<RegisResponse>,

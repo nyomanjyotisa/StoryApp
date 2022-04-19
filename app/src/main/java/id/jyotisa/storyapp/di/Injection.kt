@@ -8,7 +8,7 @@ import id.jyotisa.storyapp.database.StoryDatabase
 object Injection {
     fun provideRepository(context: Context): StoryRepository {
         val database = StoryDatabase.getDatabase(context)
-        val apiService = RetrofitConfig.apiInstance
-        return StoryRepository(database, apiService)
+        val apiService = RetrofitConfig.getApiService()
+        return StoryRepository(database, apiService, context)
     }
 }

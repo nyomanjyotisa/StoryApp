@@ -6,40 +6,32 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import id.jyotisa.storyapp.databinding.ItemStoryBinding
-import id.jyotisa.storyapp.helper.NoteDiffCallback
-import id.jyotisa.storyapp.helper.Utils.loadImage
 import id.jyotisa.storyapp.model.Story
 
 class StoryAdapter :
-    PagingDataAdapter<Story, StoryAdapter.UserViewHolder>(DIFF_CALLBACK) {
+    PagingDataAdapter<Story, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        val userBinding = ItemStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return UserViewHolder(userBinding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+
+        System.out.println("Jyoo : devii")
+        val binding = ItemStoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MyViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val data = getItem(position)
+        System.out.println("Jyoo : $data")
         if (data != null) {
             holder.bind(data)
         }
     }
 
-//    override fun getItemCount(): Int = listStory.size
-
-    inner class UserViewHolder(private val binding: ItemStoryBinding) :
+    class MyViewHolder(private val binding: ItemStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(story: Story) {
-            with(binding) {
-                username.text = story.name
-                desc.text = story.description
-                imgStory.loadImage(story.photoUrl)
-            }
+        fun bind(data: Story) {
+            System.out.println("Jyoo : " + data.name)
+            binding.username.text = data.name
         }
-    }
-
-    interface StoryCallback {
-        fun onStoryClick(story: Story)
     }
 
     companion object {
