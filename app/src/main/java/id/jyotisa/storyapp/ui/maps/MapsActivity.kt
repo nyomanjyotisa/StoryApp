@@ -83,13 +83,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }else{
                 for (story in listStory) {
                     var latLng = story.lat?.let { story.lon?.let { it1 -> LatLng(it, it1) } }
-                    mMap.addMarker(
+                    latLng?.let {
                         MarkerOptions()
-                            .position(latLng)
+                            .position(it)
                             .title(story.name)
                             .snippet(story.description)
-                    )
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5f))
+                    }?.let {
+                        mMap.addMarker(
+                            it
+                        )
+                    }
+                    latLng?.let { CameraUpdateFactory.newLatLngZoom(it, 5f) }
+                        ?.let { mMap.animateCamera(it) }
                 }
             }
         }
@@ -103,7 +108,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.map_options, menu)
         return true
     }
