@@ -11,6 +11,10 @@
                 android:title="@string/locale_setting">
             </item>
             <item
+                android:id="@id/map"
+                android:title="Maps">
+            </item>
+            <item
                 android:id="@+id/logout"
                 android:title="@string/logout">
             </item>

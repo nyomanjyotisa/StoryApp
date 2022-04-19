@@ -23,6 +23,7 @@ import id.jyotisa.storyapp.ui.addstory.AddStoryActivity
 import id.jyotisa.storyapp.ui.detail.DetailActivity
 import id.jyotisa.storyapp.ui.login.LoginActivity
 import id.jyotisa.storyapp.ui.login.LoginViewModel
+import id.jyotisa.storyapp.ui.maps.MapsActivity
 
 class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
     private lateinit var binding: ActivityMainBinding
@@ -99,6 +100,12 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback {
             R.id.logout -> {
                 loginViewModel.saveAuthToken("")
                 Intent(this@MainActivity, LoginActivity::class.java).also {
+                    startActivity(it)
+                }
+                return true
+            }
+            R.id.map -> {
+                Intent(this@MainActivity, MapsActivity::class.java).also {
                     startActivity(it)
                 }
                 return true

@@ -58,10 +58,26 @@ class LoginActivity : AppCompatActivity() {
                     binding.password.error = getString(R.string.pass_not_valid)
                 }
                 else -> {
-                    postLogin(
-                        binding.email.text.toString(),
-                        binding.password.text.toString()
-                    )
+                    showLoading(true)
+                    val pref = UserPreferences.getInstance(dataStore)
+                    val loginViewModel = ViewModelProvider(this, ViewModelFactory(pref))[LoginViewModel::class.java]
+                    loginViewModel.postLogin(email, password)
+
+                    loginViewModel.getIsSuccess().observe(this) { isSuccess ->
+                        if(isSuccess == true){
+                            Intent(this@LoginActivity, MainActivity::class.java).also {
+                                startActivity(it)
+                            }
+                        }
+                    }
+                    loginViewModel.getToastObserver().observe(this) { message ->
+                        Toast.makeText(
+                            this,
+                            message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        showLoading(false)
+                    }
                     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(view.windowToken, 0)
                 }
@@ -72,36 +88,6 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(it)
             }
         }
-    }
-
-    private fun postLogin(email: String, password: String) {
-        showLoading(true)
-        val pref = UserPreferences.getInstance(dataStore)
-        val mainViewModel = ViewModelProvider(this, ViewModelFactory(pref))[LoginViewModel::class.java]
-
-        val client = RetrofitConfig.apiInstance.login(email, password)
-        client.enqueue(object : Callback<LoginResponse> {
-            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                val responseBody = response.body()
-                if (response.isSuccessful && responseBody != null) {
-                    mainViewModel.saveAuthToken(responseBody.loginResult.token)
-                    Intent(this@LoginActivity, MainActivity::class.java).also {
-                        startActivity(it)
-                    }
-                }else{
-                    showLoading(false)
-                    if (responseBody != null){
-                        Toast.makeText(this@LoginActivity, responseBody.message, Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(this@LoginActivity, R.string.login_fail, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                showLoading(false)
-                Toast.makeText(this@LoginActivity, "Fail ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     private fun playAnimation() {

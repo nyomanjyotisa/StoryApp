@@ -2,18 +2,23 @@ package id.jyotisa.storyapp.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import id.jyotisa.storyapp.databinding.ItemStoryBinding
+import id.jyotisa.storyapp.helper.NoteDiffCallback
 import id.jyotisa.storyapp.helper.Utils.loadImage
 import id.jyotisa.storyapp.model.Story
 
 class StoryAdapter(private val callback: StoryCallback) :
     RecyclerView.Adapter<StoryAdapter.UserViewHolder>() {
-    private val _data = ArrayList<Story>()
+    private val listStory = ArrayList<Story>()
 
     fun setData(stories: ArrayList<Story>) {
-        _data.clear()
-        _data.addAll(stories)
+        val diffCallback = NoteDiffCallback(this.listStory, stories)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        this.listStory.clear()
+        this.listStory.addAll(stories)
+        diffResult.dispatchUpdatesTo(this)
         notifyDataSetChanged()
     }
 
@@ -23,10 +28,10 @@ class StoryAdapter(private val callback: StoryCallback) :
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        holder.bind(_data[position])
+        holder.bind(listStory[position])
     }
 
-    override fun getItemCount(): Int = _data.size
+    override fun getItemCount(): Int = listStory.size
 
     inner class UserViewHolder(private val binding: ItemStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {

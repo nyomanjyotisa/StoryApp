@@ -12,10 +12,18 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import id.jyotisa.storyapp.R
 import id.jyotisa.storyapp.api.RetrofitConfig
 import id.jyotisa.storyapp.databinding.ActivityRegisBinding
+import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.model.RegisResponse
+import id.jyotisa.storyapp.ui.MainActivity
+import id.jyotisa.storyapp.ui.ViewModelFactory
+import id.jyotisa.storyapp.ui.addstory.AddStoryViewModel
 import id.jyotisa.storyapp.ui.login.LoginActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,6 +32,7 @@ import retrofit2.Response
 class RegisActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisBinding
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,11 +62,27 @@ class RegisActivity : AppCompatActivity() {
                     binding.password.error = getString(R.string.pass_not_valid)
                 }
                 else -> {
-                    postRegis(
-                        binding.name.text.toString(),
-                        binding.email.text.toString(),
-                        binding.password.text.toString()
-                    )
+                    showLoading(true)
+                    val pref = UserPreferences.getInstance(dataStore)
+                    val regisViewModel = ViewModelProvider(this, ViewModelFactory(pref))[RegisViewModel::class.java]
+
+                    regisViewModel.postRegis(name, email, password)
+
+                    regisViewModel.getIsSuccess().observe(this) { isSuccess ->
+                        if(isSuccess == true){
+                            Intent(this@RegisActivity, LoginActivity::class.java).also {
+                                startActivity(it)
+                            }
+                        }
+                    }
+                    regisViewModel.getToastObserver().observe(this) { message ->
+                        Toast.makeText(
+                            this,
+                            message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        showLoading(false)
+                    }
                     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(view.windowToken, 0)
                 }
@@ -69,36 +94,6 @@ class RegisActivity : AppCompatActivity() {
                 startActivity(it)
             }
         }
-    }
-
-    private fun postRegis(name: String, email: String, password: String) {
-        showLoading(true)
-        val client = RetrofitConfig.apiInstance.register(name, email, password)
-        client.enqueue(object : Callback<RegisResponse> {
-            override fun onResponse(
-                call: Call<RegisResponse>,
-                response: Response<RegisResponse>
-            ) {
-                val responseBody = response.body()
-                if (response.isSuccessful && responseBody != null) {
-                    Toast.makeText(this@RegisActivity, getString(R.string.regis_success), Toast.LENGTH_SHORT).show()
-                    Intent(this@RegisActivity, LoginActivity::class.java).also {
-                        startActivity(it)
-                    }
-                }else{
-                    showLoading(false)
-                    if (responseBody != null) {
-                        Toast.makeText(this@RegisActivity, responseBody.message, Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(this@RegisActivity, R.string.regis_fail, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            override fun onFailure(call: Call<RegisResponse>, t: Throwable) {
-                showLoading(false)
-                Toast.makeText(this@RegisActivity, "Fail ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     private fun playAnimation() {
@@ -132,8 +127,9 @@ class RegisActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu2,menu)
         return true
+    }
 
-    }override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.locale -> {
                 startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))

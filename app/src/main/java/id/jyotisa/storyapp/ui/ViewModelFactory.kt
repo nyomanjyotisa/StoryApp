@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.ui.addstory.AddStoryViewModel
 import id.jyotisa.storyapp.ui.login.LoginViewModel
+import id.jyotisa.storyapp.ui.regis.RegisViewModel
 
 class ViewModelFactory(private val pref: UserPreferences) :
     ViewModelProvider.NewInstanceFactory() {
@@ -15,6 +16,8 @@ class ViewModelFactory(private val pref: UserPreferences) :
             return LoginViewModel(pref) as T
         }else if (modelClass.isAssignableFrom(AddStoryViewModel::class.java)) {
             return AddStoryViewModel(pref) as T
+        }else if (modelClass.isAssignableFrom(RegisViewModel::class.java)) {
+            return RegisViewModel() as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

@@ -15,8 +15,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class AddStoryViewModel(private val pref: UserPreferences) : ViewModel() {
-    private val toastMessageObserver: MutableLiveData<String?> = MutableLiveData<String?>()
-    private val isSuccessFromVM: MutableLiveData<Boolean?> = MutableLiveData<Boolean?>()
+    private var toastMessageObserver: MutableLiveData<String?> = MutableLiveData<String?>()
+    private var isSuccessFromVM: MutableLiveData<Boolean?> = MutableLiveData<Boolean?>()
 
 
     fun getAuthToken(): LiveData<String> {
