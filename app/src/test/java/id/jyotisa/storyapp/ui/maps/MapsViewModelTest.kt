@@ -1,5 +1,6 @@
 package id.jyotisa.storyapp.ui.maps
 
+import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.AsyncPagingDataDiffer
@@ -7,10 +8,18 @@ import androidx.paging.PagingData
 import id.jyotisa.storyapp.DataDummy
 import id.jyotisa.storyapp.MainCoroutineRule
 import id.jyotisa.storyapp.adapter.StoryAdapter
+import id.jyotisa.storyapp.data.Resource
+import id.jyotisa.storyapp.data.repository.AuthRepository
+import id.jyotisa.storyapp.data.repository.StoryRepository
+import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.getOrAwaitValue
+import id.jyotisa.storyapp.model.LoginResponse
+import id.jyotisa.storyapp.model.LoginResult
 import id.jyotisa.storyapp.model.Story
+import id.jyotisa.storyapp.model.StoryResponse
 import id.jyotisa.storyapp.ui.MainViewModel
 import id.jyotisa.storyapp.ui.PagedTestDataSources
+import id.jyotisa.storyapp.ui.login.LoginViewModel
 import id.jyotisa.storyapp.ui.noopListUpdateCallback
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -25,28 +34,35 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
 
-@ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class MapsViewModelTest{
+
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    @get:Rule
-    var mainCoroutineRules = MainCoroutineRule()
-
     @Mock
+    private lateinit var storyRepository: StoryRepository
     private lateinit var mapsViewModel: MapsViewModel
+    @Mock
+    private lateinit var application: Application
     private val dummyNews = DataDummy.generateDummyStoryResponse()
+    private val token = DataDummy.token
+
+    @Before
+    fun setUp() {
+        mapsViewModel = MapsViewModel(application, storyRepository)
+    }
 
     @Test
-    fun `when Network Error Should Return Error`() {
-//        val expectedStories = MutableLiveData<List<String>>()
-//        expectedStories.value = Result.Error("Error")
-//        Mockito.`when`(newsViewModel.getHeadlineNews()).thenReturn(headlineNews)
-//
-//        val actualNews = newsViewModel.getHeadlineNews().getOrAwaitValue()
-//        Mockito.verify(newsRepository).getHeadlineNews()
-//        Assert.assertNotNull(actualNews)
-//        Assert.assertTrue(actualNews is Result.Error)
+    fun `getStoryWithLocation should be success`() {
+        val expectedResponse = MutableLiveData<Resource<StoryResponse>>()
+        expectedResponse.value = Resource.Success(StoryResponse(false, "success", dummyNews))
+        Mockito.`when`(mapsViewModel.getStoryWithLocation(token)).thenReturn(expectedResponse)
+
+        val actualResponse = mapsViewModel.getStoryWithLocation(token).getOrAwaitValue()
+
+        Mockito.verify(storyRepository).getStoryWithLocation(token)
+        assertNotNull(actualResponse)
+        assertTrue(actualResponse is Resource.Success)
     }
 }

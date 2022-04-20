@@ -1,5 +1,15 @@
 package id.jyotisa.storyapp.model
 
+import com.google.gson.annotations.SerializedName
+
 data class StoryResponse (
-    val listStory: ArrayList<Story>,
+    
+    @field:SerializedName("error")
+    val error: Boolean,
+
+    @field:SerializedName("message")
+    val message: String,
+
+    @field:SerializedName("listStory")
+    val listStory: ArrayList<Story>
 )

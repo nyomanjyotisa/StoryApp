@@ -5,32 +5,16 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import id.jyotisa.storyapp.api.RetrofitConfig
+import id.jyotisa.storyapp.data.repository.AuthRepository
+import id.jyotisa.storyapp.data.repository.StoryRepository
 import id.jyotisa.storyapp.model.Story
 import id.jyotisa.storyapp.model.StoryResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MapsViewModel(application: Application) : AndroidViewModel(application) {
-    private val _stories = MutableLiveData<ArrayList<Story>>()
-    val stories: LiveData<ArrayList<Story>> = _stories
-    private val toastMessageObserver: MutableLiveData<String?> = MutableLiveData<String?>()
+class MapsViewModel(application: Application, private val storyRepository: StoryRepository) : AndroidViewModel(application) {
 
-    fun getStories(auth_token: String) {
-        val client = RetrofitConfig.getApiService().getStoryMaps("Bearer $auth_token")
-        client.enqueue(object : Callback<StoryResponse> {
-            override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
-                if (response.isSuccessful) {
-                    _stories.postValue(response.body()?.listStory)
-                }
-            }
-            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
-                toastMessageObserver.value = "onFailure getStories ${t.message}"
-            }
-        })
-    }
+    fun getStoryWithLocation(auth_token: String) = storyRepository.getStoryWithLocation(auth_token)
 
-    fun getToastObserver(): LiveData<String?> {
-        return toastMessageObserver
-    }
 }

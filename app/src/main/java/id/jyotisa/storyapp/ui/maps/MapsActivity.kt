@@ -1,12 +1,14 @@
 package id.jyotisa.storyapp.ui.maps
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -21,10 +23,15 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import id.jyotisa.storyapp.R
+import id.jyotisa.storyapp.data.Resource
 import id.jyotisa.storyapp.databinding.ActivityMapsBinding
 import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.ui.ViewModelFactory
+import id.jyotisa.storyapp.ui.login.LoginActivity
 import id.jyotisa.storyapp.ui.login.LoginViewModel
+import id.jyotisa.storyapp.ui.login.LoginViewModelFactory
+import id.jyotisa.storyapp.ui.regis.RegisViewModel
+import id.jyotisa.storyapp.ui.regis.RegisViewModelFactory
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -55,50 +62,50 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setMapStyle()
 
         val pref = UserPreferences.getInstance(dataStore)
-        val mapsViewModel = ViewModelProvider(this)[MapsViewModel::class.java]
-        val loginViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[LoginViewModel::class.java]
+
+        val factory: MapsViewModelFactory = MapsViewModelFactory.getInstance(application, this)
+        val mapsViewModel: MapsViewModel by viewModels {
+            factory
+        }
+
+        val factory2: LoginViewModelFactory = LoginViewModelFactory.getInstance(this, pref)
+        val loginViewModel: LoginViewModel by viewModels {
+            factory2
+        }
 
         loginViewModel.getAuthToken().observe(this
         ) { authToken: String ->
-            mapsViewModel.getStories(authToken)
-        }
+            mapsViewModel.getStoryWithLocation("Bearer $authToken").observe(this) { result ->
+                if (result != null) {
+                    when (result) {
+                        is Resource.Success -> {
+                            for (story in result.data?.listStory!!) {
+                                val latLng = story.lat?.let { story.lon?.let { it1 -> LatLng(it, it1) } }
+                                latLng?.let {
+                                    MarkerOptions()
+                                        .position(it)
+                                        .title(story.name)
+                                        .snippet(story.description)
+                                }?.let {
+                                    mMap.addMarker(
+                                        it
+                                    )
+                                }
+                                latLng?.let { CameraUpdateFactory.newLatLngZoom(it, 5f) }
+                                    ?.let { mMap.animateCamera(it) }
 
-        mapsViewModel.stories.observe(this) { listStory ->
-            if (listStory.isEmpty()){
-                Toast.makeText(
-                    this,
-                    "Tidak ada story dengan Lat dan Long yang ditemukan",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }else{
-                for (story in listStory) {
-                    val latLng = story.lat?.let { story.lon?.let { it1 -> LatLng(it, it1) } }
-                    latLng?.let {
-                        MarkerOptions()
-                            .position(it)
-                            .title(story.name)
-                            .snippet(story.description)
-                    }?.let {
-                        mMap.addMarker(
-                            it
-                        )
+                                latLng?.let { boundsBuilder.include(it) }
+                                val bounds: LatLngBounds = boundsBuilder.build()
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 64))
+                            }
+
+                        }
+                        is Resource.Error -> {
+                            Toast.makeText(this, "Gagal Mendapatkan Data Story dengan Location", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                    latLng?.let { CameraUpdateFactory.newLatLngZoom(it, 5f) }
-                        ?.let { mMap.animateCamera(it) }
-
-                    latLng?.let { boundsBuilder.include(it) }
-                    val bounds: LatLngBounds = boundsBuilder.build()
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 64))
                 }
             }
-        }
-
-        mapsViewModel.getToastObserver().observe(this) { message ->
-            Toast.makeText(
-                this,
-                message,
-                Toast.LENGTH_SHORT
-            ).show()
         }
     }
 

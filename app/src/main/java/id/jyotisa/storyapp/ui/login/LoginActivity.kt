@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
                                 }
                                 is Resource.Success -> {
                                     showLoading(false)
-                                    loginViewModel.saveAuthToken("Bearer "+result.data?.loginResult?.token)
+                                    result.data?.loginResult?.let { loginViewModel.saveAuthToken(it.token) }
                                     startActivity(Intent(this, MainActivity::class.java))
                                 }
                                 is Resource.Error -> {

@@ -49,4 +49,14 @@ class LoginViewModelTest{
         assertNotNull(actualResponse)
         assertTrue(actualResponse is Resource.Success)
     }
+
+    @Test
+    fun `getAuthToken should be success`() {
+        TODO()
+    }
+
+    @Test
+    fun `saveAuthToken should be success`() {
+        TODO()
+    }
 }

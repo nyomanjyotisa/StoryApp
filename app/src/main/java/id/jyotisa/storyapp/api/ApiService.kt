@@ -35,9 +35,9 @@ interface ApiService {
     ): Response<StoryResponse>
 
     @GET("stories?location=1")
-    fun getStoryMaps(
+    suspend fun getStoryMaps(
         @Header("Authorization") token: String
-    ): Call<StoryResponse>
+    ): StoryResponse
 
     @Multipart
     @POST("stories")
