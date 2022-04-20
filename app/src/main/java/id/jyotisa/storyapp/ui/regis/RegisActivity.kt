@@ -17,6 +17,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import id.jyotisa.storyapp.R
+import id.jyotisa.storyapp.data.Resource
 import id.jyotisa.storyapp.databinding.ActivityRegisBinding
 import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.ui.ViewModelFactory
@@ -26,6 +27,7 @@ class RegisActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisBinding
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
+    private lateinit var regisViewModel: RegisViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +35,7 @@ class RegisActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         playAnimation()
+        setupViewModel()
 
         binding.regis.setOnClickListener { view ->
             val name = binding.name.text.toString()
@@ -56,26 +59,8 @@ class RegisActivity : AppCompatActivity() {
                 }
                 else -> {
                     showLoading(true)
-                    val pref = UserPreferences.getInstance(dataStore)
-                    val regisViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[RegisViewModel::class.java]
-
                     regisViewModel.postRegis(name, email, password)
 
-                    regisViewModel.getIsSuccess().observe(this) { isSuccess ->
-                        if(isSuccess == true){
-                            Intent(this@RegisActivity, LoginActivity::class.java).also {
-                                startActivity(it)
-                            }
-                        }
-                    }
-                    regisViewModel.getToastObserver().observe(this) { message ->
-                        Toast.makeText(
-                            this,
-                            message,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        showLoading(false)
-                    }
                     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(view.windowToken, 0)
                 }
@@ -129,6 +114,27 @@ class RegisActivity : AppCompatActivity() {
                 return true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun setupViewModel() {
+        val pref = UserPreferences.getInstance(dataStore)
+        regisViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[RegisViewModel::class.java]
+
+        regisViewModel. authInfo.observe(this) {
+            when (it) {
+                is Resource.Success -> {
+                    showLoading(false)
+                    Toast.makeText(this, it.data, Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, LoginActivity::class.java))
+                    finishAffinity()
+                }
+                is Resource.Loading -> showLoading(true)
+                is Resource.Error -> {
+                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                    showLoading(false)
+                }
+            }
         }
     }
 }
