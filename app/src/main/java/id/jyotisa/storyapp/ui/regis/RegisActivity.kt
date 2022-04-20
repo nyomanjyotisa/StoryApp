@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -27,12 +28,18 @@ class RegisActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisBinding
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
-    private lateinit var regisViewModel: RegisViewModel
+//    private lateinit var regisViewModel: RegisViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        val factory: RegisViewModelFactory = RegisViewModelFactory.getInstance(this)
+        val regisViewModel: RegisViewModel by viewModels {
+            factory
+        }
 
         playAnimation()
         setupViewModel()
@@ -59,7 +66,24 @@ class RegisActivity : AppCompatActivity() {
                 }
                 else -> {
                     showLoading(true)
-                    regisViewModel.postRegis(name, email, password)
+                    regisViewModel.postRegis(name, email, password).observe(this) { result ->
+                        if (result != null) {
+                            when (result) {
+                                is Resource.Loading -> {
+                                    showLoading(true)
+                                }
+                                is Resource.Success -> {
+                                    showLoading(false)
+                                    Toast.makeText(this, "Registrasi Berhasil, Silahkan Login", Toast.LENGTH_SHORT).show()
+                                    startActivity(Intent(this, LoginActivity::class.java))
+                                }
+                                is Resource.Error -> {
+                                    showLoading(false)
+                                    Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    }
 
                     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(view.windowToken, 0)
@@ -118,23 +142,21 @@ class RegisActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        val pref = UserPreferences.getInstance(dataStore)
-        regisViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[RegisViewModel::class.java]
-
-        regisViewModel. authInfo.observe(this) {
-            when (it) {
-                is Resource.Success -> {
-                    showLoading(false)
-                    Toast.makeText(this, it.data, Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, LoginActivity::class.java))
-                    finishAffinity()
-                }
-                is Resource.Loading -> showLoading(true)
-                is Resource.Error -> {
-                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
-                    showLoading(false)
-                }
-            }
-        }
+//
+//        regisViewModel. authInfo.observe(this) {
+//            when (it) {
+//                is Resource.Success -> {
+//                    showLoading(false)
+//                    Toast.makeText(this, it.data, Toast.LENGTH_SHORT).show()
+//                    startActivity(Intent(this, LoginActivity::class.java))
+//                    finishAffinity()
+//                }
+//                is Resource.Loading -> showLoading(true)
+//                is Resource.Error -> {
+//                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+//                    showLoading(false)
+//                }
+//            }
+//        }
     }
 }
