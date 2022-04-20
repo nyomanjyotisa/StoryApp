@@ -13,7 +13,8 @@ import id.jyotisa.storyapp.model.Story
 @OptIn(ExperimentalPagingApi::class)
 class StoryRemoteMediator(
     private val database: StoryDatabase,
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val token: String
 ) : RemoteMediator<Int, Story>() {
 
     private companion object {
@@ -46,7 +47,7 @@ class StoryRemoteMediator(
         }
 
         try {
-            val responseData = apiService.getStoriesPaging(TOKEN, page, state.config.pageSize)
+            val responseData = apiService.getStoriesPaging(token, page, state.config.pageSize)
             val endOfPaginationReached = responseData.body()?.listStory?.isEmpty()
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {

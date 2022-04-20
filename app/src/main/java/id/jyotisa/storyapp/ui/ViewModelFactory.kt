@@ -25,7 +25,7 @@ class ViewModelFactory(private val context: Context, private val pref: UserPrefe
                 RegisViewModel() as T
             }
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
-                MainViewModel(Injection.provideRepository(context)) as T
+                MainViewModel(Injection.provideRepository(context), pref) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

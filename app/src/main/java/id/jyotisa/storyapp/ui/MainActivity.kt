@@ -25,12 +25,12 @@ import id.jyotisa.storyapp.ui.detail.DetailActivity
 import id.jyotisa.storyapp.ui.login.LoginActivity
 import id.jyotisa.storyapp.ui.login.LoginViewModel
 import id.jyotisa.storyapp.ui.maps.MapsActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback  {
     private lateinit var binding: ActivityMainBinding
-    private val mainViewModel: MainViewModel by viewModels {
-        ViewModelFactoryMain(this)
-    }
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
     private var pressedTime: Long = 0
 
@@ -43,6 +43,10 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback  {
 
         val pref = UserPreferences.getInstance(dataStore)
         val loginViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[LoginViewModel::class.java]
+
+        val mainViewModel: MainViewModel by viewModels {
+            ViewModelFactoryMain(this, pref)
+        }
 
         loginViewModel.getAuthToken().observe(this
         ) { authToken: String ->
