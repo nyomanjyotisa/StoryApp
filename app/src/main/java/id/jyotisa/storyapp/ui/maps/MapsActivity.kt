@@ -1,7 +1,6 @@
 package id.jyotisa.storyapp.ui.maps
 
 import android.content.Context
-import android.content.Intent
 import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import id.jyotisa.storyapp.R
@@ -38,12 +38,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
+    private var boundsBuilder = LatLngBounds.Builder()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        actionBar?.title = "Stories Location";
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -71,7 +74,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setMapStyle()
 
         val pref = UserPreferences.getInstance(dataStore)
-        var mapsViewModel = ViewModelProvider(this)[MapsViewModel::class.java]
+        val mapsViewModel = ViewModelProvider(this)[MapsViewModel::class.java]
         val loginViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[LoginViewModel::class.java]
 
         loginViewModel.getAuthToken().observe(this
@@ -80,6 +83,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         mapsViewModel.stories.observe(this) { listStory ->
+            Log.v("MAPSS", listStory.size.toString())
             if (listStory.isEmpty()){
                 Toast.makeText(
                     this,
@@ -89,6 +93,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }else{
                 for (story in listStory) {
                     var latLng = story.lat?.let { story.lon?.let { it1 -> LatLng(it, it1) } }
+
+                    Log.v("MAPSS", latLng.toString())
                     latLng?.let {
                         MarkerOptions()
                             .position(it)
@@ -101,6 +107,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                     latLng?.let { CameraUpdateFactory.newLatLngZoom(it, 5f) }
                         ?.let { mMap.animateCamera(it) }
+                    //set boundaries
+                    latLng?.let { boundsBuilder.include(it) }
+                    val bounds: LatLngBounds = boundsBuilder.build()
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 64))
                 }
             }
         }

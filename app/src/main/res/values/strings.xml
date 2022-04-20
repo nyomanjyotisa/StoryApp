@@ -36,5 +36,5 @@
     <string name="exit_app">Press back again to exit</string>
     <string name="regis_fail">Email already used. Please use another email.</string>
     <string name="login_fail">Email or Password wrong</string>
-    <string name="title_activity_maps" translatable="false">MapsActivity</string>
+    <string name="title_activity_maps" translatable="false">Stories Location</string>
 </resources>
