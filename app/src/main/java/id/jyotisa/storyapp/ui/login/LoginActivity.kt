@@ -11,17 +11,20 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import id.jyotisa.storyapp.R
+import id.jyotisa.storyapp.data.Resource
 import id.jyotisa.storyapp.databinding.ActivityLoginBinding
 import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.ui.MainActivity
 import id.jyotisa.storyapp.ui.ViewModelFactory
 import id.jyotisa.storyapp.ui.regis.RegisActivity
+import id.jyotisa.storyapp.ui.regis.RegisViewModelFactory
 
 class LoginActivity : AppCompatActivity() {
 
@@ -55,23 +58,28 @@ class LoginActivity : AppCompatActivity() {
                 else -> {
                     showLoading(true)
                     val pref = UserPreferences.getInstance(dataStore)
-                    val loginViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[LoginViewModel::class.java]
-                    loginViewModel.postLogin(email, password)
-
-                    loginViewModel.getIsSuccess().observe(this) { isSuccess ->
-                        if(isSuccess == true){
-                            Intent(this@LoginActivity, MainActivity::class.java).also {
-                                startActivity(it)
+                    val factory: LoginViewModelFactory = LoginViewModelFactory.getInstance(this, pref)
+                    val loginViewModel: LoginViewModel by viewModels {
+                        factory
+                    }
+                    showLoading(true)
+                    loginViewModel.postLogin(email, password).observe(this) { result ->
+                        if (result != null) {
+                            when (result) {
+                                is Resource.Loading -> {
+                                    showLoading(true)
+                                }
+                                is Resource.Success -> {
+                                    showLoading(false)
+                                    loginViewModel.saveAuthToken("Bearer "+result.data?.loginResult?.token)
+                                    startActivity(Intent(this, MainActivity::class.java))
+                                }
+                                is Resource.Error -> {
+                                    showLoading(false)
+                                    Toast.makeText(this, "Email atau password salah", Toast.LENGTH_SHORT).show()
+                                }
                             }
                         }
-                    }
-                    loginViewModel.getToastObserver().observe(this) { message ->
-                        Toast.makeText(
-                            this,
-                            message,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        showLoading(false)
                     }
                     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(view.windowToken, 0)

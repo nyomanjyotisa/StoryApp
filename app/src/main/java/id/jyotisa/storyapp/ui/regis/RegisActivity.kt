@@ -79,7 +79,7 @@ class RegisActivity : AppCompatActivity() {
                                 }
                                 is Resource.Error -> {
                                     showLoading(false)
-                                    Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this, "Email sudah digunakan, gunakan email lain", Toast.LENGTH_SHORT).show()
                                 }
                             }
                         }

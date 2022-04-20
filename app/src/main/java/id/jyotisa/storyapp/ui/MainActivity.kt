@@ -24,6 +24,7 @@ import id.jyotisa.storyapp.ui.addstory.AddStoryActivity
 import id.jyotisa.storyapp.ui.detail.DetailActivity
 import id.jyotisa.storyapp.ui.login.LoginActivity
 import id.jyotisa.storyapp.ui.login.LoginViewModel
+import id.jyotisa.storyapp.ui.login.LoginViewModelFactory
 import id.jyotisa.storyapp.ui.maps.MapsActivity
 
 class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback  {
@@ -39,7 +40,10 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback  {
         binding.rvStories.layoutManager = LinearLayoutManager(this)
 
         val pref = UserPreferences.getInstance(dataStore)
-        val loginViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[LoginViewModel::class.java]
+        val factory: LoginViewModelFactory = LoginViewModelFactory.getInstance(this, pref)
+        val loginViewModel: LoginViewModel by viewModels {
+            factory
+        }
 
         val mainViewModel: MainViewModel by viewModels {
             ViewModelFactoryMain(this, pref)
