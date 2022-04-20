@@ -19,7 +19,6 @@ class StoryRemoteMediator(
 
     private companion object {
         const val INITIAL_PAGE_INDEX = 1
-        const val TOKEN = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLVptUVFrek5Nd1ljZW9EMEMiLCJpYXQiOjE2NTAzNDQxNTl9.lubZzUc4Nmri5ruC7zGmpDmiJ9k-4AjEyVG7iovziBE"
     }
 
     override suspend fun initialize(): InitializeAction {

@@ -9,6 +9,6 @@ object Injection {
     fun provideRepository(context: Context): StoryRepository {
         val database = StoryDatabase.getDatabase(context)
         val apiService = RetrofitConfig.getApiService()
-        return StoryRepository(database, apiService, context)
+        return StoryRepository(database, apiService)
     }
 }

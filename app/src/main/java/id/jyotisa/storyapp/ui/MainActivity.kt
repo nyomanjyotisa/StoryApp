@@ -25,9 +25,6 @@ import id.jyotisa.storyapp.ui.detail.DetailActivity
 import id.jyotisa.storyapp.ui.login.LoginActivity
 import id.jyotisa.storyapp.ui.login.LoginViewModel
 import id.jyotisa.storyapp.ui.maps.MapsActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback  {
     private lateinit var binding: ActivityMainBinding

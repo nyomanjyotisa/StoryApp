@@ -12,9 +12,7 @@ import id.jyotisa.storyapp.database.StoryDatabase
 import id.jyotisa.storyapp.model.Story
 
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
-
-class StoryRepository(private val storyDatabase: StoryDatabase, private val apiService: ApiService, private val context: Context) {
+class StoryRepository(private val storyDatabase: StoryDatabase, private val apiService: ApiService) {
     @OptIn(ExperimentalPagingApi::class)
     fun getStory(token: String): LiveData<PagingData<Story>> {
         return Pager(

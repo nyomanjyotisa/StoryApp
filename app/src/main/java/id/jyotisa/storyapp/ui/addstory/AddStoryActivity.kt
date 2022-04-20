@@ -55,6 +55,7 @@ class AddStoryActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        fetchLocation()
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (!allPermissionsGranted()) {
                 Toast.makeText(
@@ -78,7 +79,6 @@ class AddStoryActivity : AppCompatActivity() {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        fetchLocation()
 
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
@@ -90,6 +90,8 @@ class AddStoryActivity : AppCompatActivity() {
         binding.camera.setOnClickListener { startTakePhoto() }
         binding.gallery.setOnClickListener { startGallery() }
         binding.upload.setOnClickListener { uploadImage() }
+
+
     }
 
     private fun fetchLocation(){
