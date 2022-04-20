@@ -9,9 +9,6 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
 import id.jyotisa.storyapp.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class EmailEditText: AppCompatEditText, View.OnTouchListener {
 

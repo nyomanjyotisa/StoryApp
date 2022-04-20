@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +28,6 @@ import id.jyotisa.storyapp.ui.maps.MapsActivity
 
 class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback  {
     private lateinit var binding: ActivityMainBinding
-    //    private lateinit var mainViewModel: MainViewModel
     private val mainViewModel: MainViewModel by viewModels {
         ViewModelFactoryMain(this)
     }

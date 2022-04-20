@@ -27,13 +27,15 @@
     <string name="locale_setting">Pengaturan Locale</string>
     <string name="logout">Keluar</string>
     <string name="permission_denied">Tidak mendapatkan permission</string>
-    <string name="can_not_load_stories">Tidak bisa load story</string>
     <string name="email_not_valid">Email tidak valid</string>
     <string name="pass_not_valid">Password Minimal 6 Karakter</string>
     <string name="picture_chooser">Pilih Gambar</string>
     <string name="no_image">Silakan masukkan berkas gambar terlebih dahulu.</string>
-    <string name="regis_success">Pendaftaran Berhasil. Silahkan Login</string>
     <string name="exit_app">Tekan kembali lagi untuk keluar</string>
-    <string name="regis_fail">Email telah diterdaftar. Gunakan Email Lain.</string>
-    <string name="login_fail">Email atau Password anda Salah</string>
+    <string name="retry">Retry</string>
+    <string name="normal">Normal</string>
+    <string name="satellite">Satellite</string>
+    <string name="terrain">Terrain</string>
+    <string name="hybrid">Hybrid</string>
+    <string name="stories_location">Stories Location</string>
 </resources>

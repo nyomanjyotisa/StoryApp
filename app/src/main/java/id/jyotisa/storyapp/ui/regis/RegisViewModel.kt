@@ -1,14 +1,10 @@
 package id.jyotisa.storyapp.ui.regis
 
-import android.content.Intent
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import id.jyotisa.storyapp.R
 import id.jyotisa.storyapp.api.RetrofitConfig
 import id.jyotisa.storyapp.model.RegisResponse
-import id.jyotisa.storyapp.ui.login.LoginActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

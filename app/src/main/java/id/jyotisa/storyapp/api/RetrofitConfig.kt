@@ -1,6 +1,5 @@
 package id.jyotisa.storyapp.api
 
-import id.jyotisa.storyapp.BuildConfig
 import id.jyotisa.storyapp.helper.Network.URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

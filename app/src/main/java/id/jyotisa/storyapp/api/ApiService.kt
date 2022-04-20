@@ -1,12 +1,14 @@
 package id.jyotisa.storyapp.api
 
-import id.jyotisa.storyapp.model.*
+import id.jyotisa.storyapp.model.FileUploadResponse
+import id.jyotisa.storyapp.model.LoginResponse
+import id.jyotisa.storyapp.model.RegisResponse
+import id.jyotisa.storyapp.model.StoryResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
-import java.util.ArrayList
 
 interface ApiService {
 
@@ -26,11 +28,6 @@ interface ApiService {
     ): Call<LoginResponse>
 
     @GET("stories")
-    fun getStories(
-        @Header("Authorization") token: String
-    ): Call<StoryResponse>
-
-    @GET("stories")
     suspend fun getStoriesPaging(
         @Header("Authorization") token: String,
         @Query("page") page: Int,
@@ -38,7 +35,7 @@ interface ApiService {
     ): Response<StoryResponse>
 
     @GET("stories?location=1")
-    suspend fun getStoryMaps(
+    fun getStoryMaps(
         @Header("Authorization") token: String
     ): Call<StoryResponse>
 

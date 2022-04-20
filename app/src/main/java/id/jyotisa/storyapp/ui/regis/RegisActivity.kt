@@ -17,17 +17,10 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import id.jyotisa.storyapp.R
-import id.jyotisa.storyapp.api.RetrofitConfig
 import id.jyotisa.storyapp.databinding.ActivityRegisBinding
 import id.jyotisa.storyapp.datastore.UserPreferences
-import id.jyotisa.storyapp.model.RegisResponse
-import id.jyotisa.storyapp.ui.MainActivity
 import id.jyotisa.storyapp.ui.ViewModelFactory
-import id.jyotisa.storyapp.ui.addstory.AddStoryViewModel
 import id.jyotisa.storyapp.ui.login.LoginActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class RegisActivity : AppCompatActivity() {
 

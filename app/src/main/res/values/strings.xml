@@ -27,14 +27,16 @@
     <string name="locale_setting">Locale Setting</string>
     <string name="logout">Logout</string>
     <string name="permission_denied">Don\'t get permission</string>
-    <string name="can_not_load_stories">Can not load stories</string>
     <string name="email_not_valid">Email not valid</string>
     <string name="pass_not_valid">6 Chars Min for Password</string>
     <string name="picture_chooser">Choose a Picture</string>
     <string name="no_image">Please select an image first.</string>
-    <string name="regis_success">Registration Success. Please Login</string>
     <string name="exit_app">Press back again to exit</string>
-    <string name="regis_fail">Email already used. Please use another email.</string>
-    <string name="login_fail">Email or Password wrong</string>
     <string name="title_activity_maps" translatable="false">Stories Location</string>
+    <string name="retry">Retry</string>
+    <string name="normal">Normal</string>
+    <string name="satellite">Satellite</string>
+    <string name="terrain">Terrain</string>
+    <string name="hybrid">Hybrid</string>
+    <string name="stories_location">Stories Location</string>
 </resources>

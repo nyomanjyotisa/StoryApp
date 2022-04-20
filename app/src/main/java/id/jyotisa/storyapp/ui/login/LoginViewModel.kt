@@ -1,14 +1,9 @@
 package id.jyotisa.storyapp.ui.login
 
-import android.content.Intent
-import android.widget.Toast
 import androidx.lifecycle.*
-import id.jyotisa.storyapp.R
 import id.jyotisa.storyapp.api.RetrofitConfig
 import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.model.LoginResponse
-import id.jyotisa.storyapp.ui.MainActivity
-import id.jyotisa.storyapp.ui.ViewModelFactory
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
