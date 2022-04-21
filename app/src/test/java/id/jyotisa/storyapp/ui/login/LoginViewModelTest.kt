@@ -2,6 +2,9 @@ package id.jyotisa.storyapp.ui.login
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asFlow
+import id.jyotisa.storyapp.DataDummy
+import id.jyotisa.storyapp.MainCoroutineRule
 import id.jyotisa.storyapp.data.Resource
 import id.jyotisa.storyapp.data.repository.AuthRepository
 import id.jyotisa.storyapp.datastore.UserPreferences
@@ -10,6 +13,8 @@ import id.jyotisa.storyapp.model.LoginResponse
 import id.jyotisa.storyapp.model.LoginResult
 import id.jyotisa.storyapp.model.RegisResponse
 import id.jyotisa.storyapp.ui.regis.RegisViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -19,6 +24,7 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
 
+@ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class LoginViewModelTest{
 
@@ -30,11 +36,15 @@ class LoginViewModelTest{
     private lateinit var loginViewModel: LoginViewModel
     @Mock
     private lateinit var pref: UserPreferences
+    private val token = DataDummy.token
 
     @Before
     fun setUp() {
         loginViewModel = LoginViewModel(pref, authRepository)
     }
+
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
     @Test
     fun `postLogin should be success`() {
@@ -51,12 +61,17 @@ class LoginViewModelTest{
     }
 
     @Test
-    fun `getAuthToken should be success`() {
-        TODO()
+    fun getAuthToken() = mainCoroutineRule.runBlockingTest {
+        val expected = MutableLiveData<String>()
+        expected.value = token
+        Mockito.`when`(pref.getAuthToken()).thenReturn(expected.asFlow())
+        loginViewModel.getAuthToken().getOrAwaitValue()
+        Mockito.verify(pref).getAuthToken()
     }
 
     @Test
-    fun `saveAuthToken should be success`() {
-        TODO()
+    fun saveAuthToken() = mainCoroutineRule.runBlockingTest {
+        loginViewModel.saveAuthToken(token)
+        Mockito.verify(pref).saveAuthToken(token)
     }
 }

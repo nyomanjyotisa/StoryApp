@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -21,12 +22,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import id.jyotisa.storyapp.R
+import id.jyotisa.storyapp.data.Resource
 import id.jyotisa.storyapp.databinding.ActivityAddStoryBinding
 import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.helper.Utils.reduceFileImage
 import id.jyotisa.storyapp.helper.Utils.uriToFile
 import id.jyotisa.storyapp.ui.MainActivity
 import id.jyotisa.storyapp.ui.ViewModelFactory
+import id.jyotisa.storyapp.ui.login.LoginViewModel
+import id.jyotisa.storyapp.ui.login.LoginViewModelFactory
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -167,35 +171,28 @@ class AddStoryActivity : AppCompatActivity() {
             val file = reduceFileImage(getFile as File)
 
             val description = binding.desc.text.toString()
-            val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-            val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
-                "photo",
-                file.name,
-                requestImageFile
-            )
 
             val pref = UserPreferences.getInstance(dataStore)
-            val addStoryViewModel = ViewModelProvider(this, ViewModelFactory(this, pref))[AddStoryViewModel::class.java]
-
-            addStoryViewModel.getToastObserver().observe(this) { message ->
-                Toast.makeText(
-                    this,
-                    message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            addStoryViewModel.getIsSuccess().observe(this) { isSuccess ->
-                if(isSuccess == true){
-                    Intent(this@AddStoryActivity, MainActivity::class.java).also {
-                        startActivity(it)
-                    }
-                }
+            val factory: AddStoryViewModelFactory = AddStoryViewModelFactory.getInstance(this, pref)
+            val addStoryViewModel: AddStoryViewModel by viewModels {
+                factory
             }
 
             addStoryViewModel.getAuthToken().observe(this
             ) { authToken: String ->
-                addStoryViewModel.getStories(authToken, imageMultipart, description, latitude, longitude)
+                addStoryViewModel.postStories(authToken, file, description, latitude, longitude).observe(this) { result ->
+                    if (result != null) {
+                        when (result) {
+                            is Resource.Success -> {
+                                Toast.makeText(this, "Upload Story Berhasil", Toast.LENGTH_SHORT).show()
+                                startActivity(Intent(this, MainActivity::class.java))
+                            }
+                            is Resource.Error -> {
+                                Toast.makeText(this, "Upload Story Gagal", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                }
             }
         } else {
             Toast.makeText(this@AddStoryActivity, getString(R.string.no_image), Toast.LENGTH_SHORT).show()

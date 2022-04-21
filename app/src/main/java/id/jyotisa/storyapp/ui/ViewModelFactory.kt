@@ -15,9 +15,6 @@ class ViewModelFactory(private val context: Context, private val pref: UserPrefe
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
-            modelClass.isAssignableFrom(AddStoryViewModel::class.java) -> {
-                AddStoryViewModel(pref) as T
-            }
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
                 MainViewModel(Injection.provideRepository(context), pref) as T
             }

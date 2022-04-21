@@ -7,8 +7,12 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
 import android.widget.ImageView
+import androidx.test.espresso.idling.CountingIdlingResource
 import com.bumptech.glide.Glide
 import id.jyotisa.storyapp.R
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -67,5 +71,42 @@ object Utils {
         bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
 
         return file
+    }
+
+    fun fileToMultipart(file: File): MultipartBody.Part{
+        val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+            "photo",
+            file.name,
+            requestImageFile
+        )
+        return imageMultipart
+    }
+
+    object EspressoIdlingResource {
+
+        private const val RESOURCE = "GLOBAL"
+
+        @JvmField
+        val countingIdlingResource = CountingIdlingResource(RESOURCE)
+
+        fun increment() {
+            countingIdlingResource.increment()
+        }
+
+        fun decrement() {
+            if (!countingIdlingResource.isIdleNow) {
+                countingIdlingResource.decrement()
+            }
+        }
+    }
+
+    inline fun <T> wrapEspressoIdlingResource(function: () -> T): T {
+        EspressoIdlingResource.increment() // Set app as busy.
+        return try {
+            function()
+        } finally {
+            EspressoIdlingResource.decrement() // Set app as idle.
+        }
     }
 }
