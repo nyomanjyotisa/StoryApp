@@ -2,20 +2,12 @@ package id.jyotisa.storyapp.data.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
-import androidx.viewbinding.BuildConfig
-import com.google.gson.Gson
 import id.jyotisa.storyapp.api.ApiService
-import id.jyotisa.storyapp.api.RetrofitConfig
 import id.jyotisa.storyapp.data.Resource
 import id.jyotisa.storyapp.helper.Utils.wrapEspressoIdlingResource
-import id.jyotisa.storyapp.model.BaseResponse
 import id.jyotisa.storyapp.model.LoginResponse
 import id.jyotisa.storyapp.model.RegisResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class AuthRepository(
     private val apiService: ApiService

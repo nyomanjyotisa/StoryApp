@@ -73,14 +73,13 @@ object Utils {
         return file
     }
 
-    fun fileToMultipart(file: File): MultipartBody.Part{
+    fun fileToMultipart(file: File): MultipartBody.Part {
         val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+        return MultipartBody.Part.createFormData(
             "photo",
             file.name,
             requestImageFile
         )
-        return imageMultipart
     }
 
     object EspressoIdlingResource {

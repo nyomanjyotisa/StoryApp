@@ -16,15 +16,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import id.jyotisa.storyapp.R
 import id.jyotisa.storyapp.data.Resource
 import id.jyotisa.storyapp.databinding.ActivityLoginBinding
 import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.ui.MainActivity
-import id.jyotisa.storyapp.ui.ViewModelFactory
 import id.jyotisa.storyapp.ui.regis.RegisActivity
-import id.jyotisa.storyapp.ui.regis.RegisViewModelFactory
 
 class LoginActivity : AppCompatActivity() {
 

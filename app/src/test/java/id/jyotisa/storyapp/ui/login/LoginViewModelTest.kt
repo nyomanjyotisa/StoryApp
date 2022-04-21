@@ -11,11 +11,10 @@ import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.getOrAwaitValue
 import id.jyotisa.storyapp.model.LoginResponse
 import id.jyotisa.storyapp.model.LoginResult
-import id.jyotisa.storyapp.model.RegisResponse
-import id.jyotisa.storyapp.ui.regis.RegisViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert.*
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

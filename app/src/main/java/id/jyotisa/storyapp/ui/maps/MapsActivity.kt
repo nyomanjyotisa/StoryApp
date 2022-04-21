@@ -1,7 +1,6 @@
 package id.jyotisa.storyapp.ui.maps
 
 import android.content.Context
-import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
@@ -13,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -26,12 +24,8 @@ import id.jyotisa.storyapp.R
 import id.jyotisa.storyapp.data.Resource
 import id.jyotisa.storyapp.databinding.ActivityMapsBinding
 import id.jyotisa.storyapp.datastore.UserPreferences
-import id.jyotisa.storyapp.ui.ViewModelFactory
-import id.jyotisa.storyapp.ui.login.LoginActivity
 import id.jyotisa.storyapp.ui.login.LoginViewModel
 import id.jyotisa.storyapp.ui.login.LoginViewModelFactory
-import id.jyotisa.storyapp.ui.regis.RegisViewModel
-import id.jyotisa.storyapp.ui.regis.RegisViewModelFactory
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -103,6 +97,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         is Resource.Error -> {
                             Toast.makeText(this, "Gagal Mendapatkan Data Story dengan Location", Toast.LENGTH_SHORT).show()
                         }
+                        is Resource.Loading -> TODO()
                     }
                 }
             }

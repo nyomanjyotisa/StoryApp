@@ -3,13 +3,9 @@ package id.jyotisa.storyapp.ui.addstory
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import id.jyotisa.storyapp.data.repository.AuthRepository
 import id.jyotisa.storyapp.data.repository.StoryRepository
 import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.di.Injection
-import id.jyotisa.storyapp.ui.addstory.AddStoryViewModel
-import id.jyotisa.storyapp.ui.login.LoginViewModel
-import id.jyotisa.storyapp.ui.regis.RegisViewModel
 
 class AddStoryViewModelFactory(private val storyRepository: StoryRepository, private val pref: UserPreferences) :
     ViewModelProvider.NewInstanceFactory() {

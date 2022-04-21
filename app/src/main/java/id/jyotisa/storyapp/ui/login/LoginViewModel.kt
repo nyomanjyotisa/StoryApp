@@ -1,14 +1,12 @@
 package id.jyotisa.storyapp.ui.login
 
-import androidx.lifecycle.*
-import id.jyotisa.storyapp.api.RetrofitConfig
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import id.jyotisa.storyapp.data.repository.AuthRepository
 import id.jyotisa.storyapp.datastore.UserPreferences
-import id.jyotisa.storyapp.model.LoginResponse
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class LoginViewModel(private val pref: UserPreferences, private val authRepository: AuthRepository) : ViewModel() {
 

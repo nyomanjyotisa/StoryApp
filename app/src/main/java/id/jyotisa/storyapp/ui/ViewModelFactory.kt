@@ -5,9 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.di.Injection
-import id.jyotisa.storyapp.ui.addstory.AddStoryViewModel
-import id.jyotisa.storyapp.ui.login.LoginViewModel
-import id.jyotisa.storyapp.ui.regis.RegisViewModel
 
 class ViewModelFactory(private val context: Context, private val pref: UserPreferences) :
     ViewModelProvider.NewInstanceFactory() {

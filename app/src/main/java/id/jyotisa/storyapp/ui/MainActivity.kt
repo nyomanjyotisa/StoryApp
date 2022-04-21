@@ -6,11 +6,9 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View.GONE
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.motion.widget.Key.VISIBILITY
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -69,7 +67,6 @@ class MainActivity : AppCompatActivity(), StoryAdapter.StoryCallback  {
 
         mainViewModel.story.observe(this) {
             adapter.submitData(lifecycle, it)
-            binding.errorMsg.visibility = GONE
         }
 
         binding.fab.setOnClickListener {

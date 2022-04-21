@@ -6,15 +6,15 @@ import id.jyotisa.storyapp.data.Resource
 import id.jyotisa.storyapp.data.repository.AuthRepository
 import id.jyotisa.storyapp.getOrAwaitValue
 import id.jyotisa.storyapp.model.RegisResponse
-import org.junit.Assert
-import org.junit.Assert.*
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)

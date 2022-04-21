@@ -18,7 +18,6 @@ import androidx.core.content.FileProvider
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import id.jyotisa.storyapp.R
@@ -28,12 +27,6 @@ import id.jyotisa.storyapp.datastore.UserPreferences
 import id.jyotisa.storyapp.helper.Utils.reduceFileImage
 import id.jyotisa.storyapp.helper.Utils.uriToFile
 import id.jyotisa.storyapp.ui.MainActivity
-import id.jyotisa.storyapp.ui.ViewModelFactory
-import id.jyotisa.storyapp.ui.login.LoginViewModel
-import id.jyotisa.storyapp.ui.login.LoginViewModelFactory
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
 
@@ -83,7 +76,6 @@ class AddStoryActivity : AppCompatActivity() {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
                 this,
@@ -94,8 +86,6 @@ class AddStoryActivity : AppCompatActivity() {
         binding.camera.setOnClickListener { startTakePhoto() }
         binding.gallery.setOnClickListener { startGallery() }
         binding.upload.setOnClickListener { uploadImage() }
-
-
     }
 
     private fun fetchLocation(){

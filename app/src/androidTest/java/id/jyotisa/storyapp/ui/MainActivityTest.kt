@@ -1,9 +1,5 @@
 package id.jyotisa.storyapp.ui
 
-import android.os.Bundle
-import android.support.test.espresso.contrib.RecyclerViewActions
-import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.IdlingRegistry
@@ -14,15 +10,14 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import id.jyotisa.storyapp.JsonConverter
 import id.jyotisa.storyapp.R
-import okhttp3.mockwebserver.MockWebServer
-import org.junit.After
-import org.junit.Assert.*
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
 import id.jyotisa.storyapp.helper.Network.URL
 import id.jyotisa.storyapp.helper.Utils.EspressoIdlingResource
 import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @MediumTest

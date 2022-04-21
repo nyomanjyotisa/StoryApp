@@ -16,8 +16,8 @@ import id.jyotisa.storyapp.model.Story
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -64,7 +64,7 @@ class MainViewModelTest{
     }
 }
 
-class PagedTestDataSources private constructor(private val items: List<Story>) :
+class PagedTestDataSources private constructor() :
     PagingSource<Int, LiveData<List<Story>>>() {
     companion object {
         fun snapshot(items: List<Story>): PagingData<Story> {

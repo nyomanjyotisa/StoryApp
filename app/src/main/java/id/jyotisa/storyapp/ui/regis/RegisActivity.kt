@@ -13,28 +13,19 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import id.jyotisa.storyapp.R
 import id.jyotisa.storyapp.data.Resource
 import id.jyotisa.storyapp.databinding.ActivityRegisBinding
-import id.jyotisa.storyapp.datastore.UserPreferences
-import id.jyotisa.storyapp.ui.ViewModelFactory
 import id.jyotisa.storyapp.ui.login.LoginActivity
 
 class RegisActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisBinding
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
-//    private lateinit var regisViewModel: RegisViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         val factory: RegisViewModelFactory = RegisViewModelFactory.getInstance(this)
         val regisViewModel: RegisViewModel by viewModels {
@@ -42,7 +33,6 @@ class RegisActivity : AppCompatActivity() {
         }
 
         playAnimation()
-        setupViewModel()
 
         binding.regis.setOnClickListener { view ->
             val name = binding.name.text.toString()
@@ -139,24 +129,5 @@ class RegisActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun setupViewModel() {
-//
-//        regisViewModel. authInfo.observe(this) {
-//            when (it) {
-//                is Resource.Success -> {
-//                    showLoading(false)
-//                    Toast.makeText(this, it.data, Toast.LENGTH_SHORT).show()
-//                    startActivity(Intent(this, LoginActivity::class.java))
-//                    finishAffinity()
-//                }
-//                is Resource.Loading -> showLoading(true)
-//                is Resource.Error -> {
-//                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
-//                    showLoading(false)
-//                }
-//            }
-//        }
     }
 }
